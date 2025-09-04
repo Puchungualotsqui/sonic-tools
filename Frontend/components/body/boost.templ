@@ -1,0 +1,85 @@
+package body
+
+import (
+	"github.com/Puchungualotsqui/sonic-tools/components/upload_area"
+)
+
+templ Boost() {
+	<section class="pt-8 pb-12 px-6 max-w-3xl mx-auto">
+	  <h2 class="text-3xl font-bold text-center mb-8">🔊 Volume Booster</h2>
+
+	  <!-- Upload area -->
+	  @upload_area.UploadArea()
+
+	  <!-- Volume form -->
+	  <form hx-post="/tools/volume" hx-target="#tool-content" class="space-y-6 mt-8">
+
+	    <!-- Mode selection -->
+	    <div>
+	      <h3 class="text-lg font-semibold mb-3">Mode</h3>
+	      <div class="flex flex-col gap-2">
+	        <label class="flex items-center gap-2">
+	          <input type="radio" name="mode" value="boost" class="radio radio-sm" checked>
+	          <span>Boost (manual gain)</span>
+	        </label>
+	        <label class="flex items-center gap-2">
+	          <input type="radio" name="mode" value="normalize" class="radio radio-sm">
+	          <span>Normalize (auto level)</span>
+	        </label>
+	      </div>
+	    </div>
+
+	    <!-- Gain slider -->
+		<div id="gainInput" class="space-y-2">
+		  <label class="font-medium">Gain (dB)</label>
+		  <input
+		    type="range"
+		    name="gain"
+		    id="gainRange"
+		    min="-20"
+		    max="20"
+		    value="0"
+		    class="range"
+		  />
+		  <div class="flex justify-between text-base font-medium px-1">
+		    <span>-20 dB</span>
+		    <span id="gainValue">0 dB</span>
+		    <span>+20 dB</span>
+		  </div>
+		</div>
+
+
+	    <!-- Submit -->
+	    <div class="pt-4 text-center">
+	      <button type="submit" class="btn btn-primary btn-lg">Apply</button>
+	    </div>
+	  </form>
+	</section>
+
+	<script>
+	  const modeRadios = document.querySelectorAll('input[name="mode"]');
+	  const gainDiv = document.getElementById('gainInput');
+	  const gainRange = document.getElementById('gainRange');
+	  const gainValue = document.getElementById('gainValue');
+
+	  // Update value when slider moves
+	  gainRange.addEventListener('input', () => {
+	    gainValue.textContent = `${gainRange.value} dB`;
+	  });
+
+	  // Toggle gain slider visibility based on mode
+	  modeRadios.forEach(radio => {
+	    radio.addEventListener('change', () => {
+	      if (radio.value === 'boost') {
+	        gainDiv.classList.remove('hidden');
+	      } else {
+	        gainDiv.classList.add('hidden');
+	      }
+	    });
+	  });
+	</script>
+
+
+
+
+}

@@ -1,0 +1,38 @@
+package views
+
+import (
+	 "github.com/Puchungualotsqui/sonic-tools/components/header"
+	"github.com/Puchungualotsqui/sonic-tools/components/footer"
+)
+
+templ Layout(content templ.Component) {
+	<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+			<title>Hello World</title>
+
+			<!-- Tailwind + DaisyUI -->
+			<script src="https://cdn.tailwindcss.com"></script>
+			<link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.css" rel="stylesheet" />
+
+			<!-- HTMX -->
+			<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+			<!-- Alpine.js -->
+			<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+		</head>
+		<body class="min-h-screen flex flex-col bg-base-200" >
+			<div id="header-container">
+				@header.Header()
+			</div>
+			<div id="body-container">
+				@content
+			</div>
+			<div id="footer-container">
+				@footer.Footer()
+			</div>
+			</body>
+		</html>
+}

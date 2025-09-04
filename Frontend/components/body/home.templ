@@ -1,0 +1,36 @@
+package body
+
+import (
+	"github.com/Puchungualotsqui/sonic-tools/components/card"
+)
+
+templ Home() {
+	<!-- Hero -->
+	<section class="hero bg-base-200 pt-10 sm:pt-12 lg:pt-16 pb-0 px-6">
+	  <div class="hero-content flex flex-col text-center max-w-6xl mx-auto">
+	    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+	      The Easiest Way to Edit Your Audio 🎶
+	    </h1>
+	    <p class="text-base sm:text-lg lg:text-xl opacity-80 mb-8 max-w-3xl mx-auto">
+	      Compress, convert, trim, merge, and edit metadata — all in your browser.
+	      No installs, no hassle. Just upload your audio and make it perfect.
+	    </p>
+	  </div>
+	</section>
+
+	<!-- Features -->
+	<section class="pt-3 sm:pt-8 lg:pt-10 pb-10 sm:pb-12 lg:pb-16 px-6 max-w-6xl mx-auto">
+	  <h2 class="text-3xl font-bold text-center mb-10">Everything you need in one place</h2>
+	  <div class="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-3">
+
+	@card.Card("/compress", "🎚️", "Compress", "Reduce file size while keeping great quality. Choose bitrate, presets, or target size.")
+	@card.Card("/convert", "🔄", "Convert", "MP3 ⇆ WAV ⇆ FLAC ⇆ OGG ⇆ AAC ⇆ M4A. Seamless format conversion made simple.")
+	@card.Card("/trim", "✂️", "Trim", "Select start and end time, cut or keep just the part you need — fast and precise.")
+	@card.Card("/merge", "➕", "Merge", "Combine multiple tracks into one smooth file. Perfect for playlists, podcasts, or mixes.")
+	@card.Card("/metadata", "🏷️", "Metadata", "Edit title, artist, album, year, and cover art to keep your library tidy.")
+	@card.Card("/boost", "🔊", "Boost", "Increase the volume of your audio or normalize it for balanced levels.")
+
+
+	  </div>
+	</section>
+}

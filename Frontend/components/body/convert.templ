@@ -1,0 +1,72 @@
+package body
+
+import (
+	"github.com/Puchungualotsqui/sonic-tools/components/upload_area"
+)
+
+templ Convert() {
+	<section class="pt-8 pb-12 px-6 max-w-3xl mx-auto">
+	  <h2 class="text-3xl font-bold text-center mb-8">🔄 Convert Your Audio</h2>
+
+	  <!-- Upload area -->
+	  @upload_area.UploadArea()
+
+	  <!-- Convert options -->
+	  <form hx-post="/tools/convert" hx-target="#tool-content" class="space-y-6">
+
+	    <!-- Output format -->
+	    <div>
+	      <h3 class="text-lg font-semibold mb-3">Select Output Format</h3>
+	      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+	        <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
+	          <input type="radio" name="format" value="mp3" class="radio radio-sm" checked>
+	          <span>MP3</span>
+	        </label>
+	        <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
+	          <input type="radio" name="format" value="wav" class="radio radio-sm">
+	          <span>WAV</span>
+	        </label>
+	        <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
+	          <input type="radio" name="format" value="flac" class="radio radio-sm">
+	          <span>FLAC</span>
+	        </label>
+	        <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
+	          <input type="radio" name="format" value="ogg" class="radio radio-sm">
+	          <span>OGG</span>
+	        </label>
+	        <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
+	          <input type="radio" name="format" value="aac" class="radio radio-sm">
+	          <span>AAC</span>
+	        </label>
+	        <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
+	          <input type="radio" name="format" value="m4a" class="radio radio-sm">
+	          <span>M4A</span>
+	        </label>
+	      </div>
+	    </div>
+
+	    <!-- Bitrate -->
+	    <div>
+	      <h3 class="text-lg font-semibold mb-3">Bitrate (kbps)</h3>
+	      <input
+	        type="number"
+	        name="bitrate"
+	        min="32"
+	        max="320"
+	        step="1"
+	        placeholder="128"
+	        class="input input-bordered w-full placeholder:text-gray-400 placeholder:opacity-60"
+	        oninput="if(this.value === '0') this.value = ''"
+	        onkeydown="return event.key >= '0' && event.key <= '9' || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'"
+	      />
+	      <p class="text-sm opacity-70 mt-1">Typical values: 128 (standard), 192 (good), 320 (high quality)</p>
+	    </div>
+
+	    <!-- Submit -->
+	    <div class="pt-4 text-center">
+	      <button type="submit" class="btn btn-primary btn-lg">Convert</button>
+	    </div>
+	  </form>
+	</section>
+
+}

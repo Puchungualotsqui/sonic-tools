@@ -1,0 +1,64 @@
+package body
+
+import (
+	"github.com/Puchungualotsqui/sonic-tools/components/upload_area"
+)
+
+templ Trim() {
+	<section class="pt-8 pb-12 px-6 max-w-3xl mx-auto">
+	  <h2 class="text-3xl font-bold text-center mb-8">✂️ Trim Your Audio</h2>
+
+	  <!-- Upload area -->
+	  @upload_area.UploadArea()
+
+	  <form hx-post="/tools/trim" hx-target="#tool-content" class="space-y-6">
+
+	    <!-- Time Inputs -->
+	    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+	      <div>
+	        <label class="font-medium">Start Time</label>
+	        <input
+	          type="text"
+	          name="start"
+	          placeholder="00:00"
+	          pattern="^([0-9]{1,2}):([0-5][0-9])(:[0-5][0-9])?$"
+	          class="input input-bordered w-full placeholder:text-gray-400 placeholder:opacity-60"
+	        />
+	        <p class="text-xs opacity-70 mt-1">Format: mm:ss or hh:mm:ss</p>
+	      </div>
+	      <div>
+	        <label class="font-medium">End Time</label>
+	        <input
+	          type="text"
+	          name="end"
+	          placeholder="03:45"
+	          pattern="^([0-9]{1,2}):([0-5][0-9])(:[0-5][0-9])?$"
+	          class="input input-bordered w-full placeholder:text-gray-400 placeholder:opacity-60"
+	        />
+	        <p class="text-xs opacity-70 mt-1">Format: mm:ss or hh:mm:ss</p>
+	      </div>
+	    </div>
+
+	    <!-- Keep or Remove -->
+	    <div>
+	      <h3 class="text-lg font-semibold mb-3">Action</h3>
+	      <label class="flex items-center gap-2">
+	        <input type="radio" name="mode" value="keep" class="radio radio-sm" checked>
+	        <span>Keep selection (cut everything else)</span>
+	      </label>
+	      <label class="flex items-center gap-2">
+	        <input type="radio" name="mode" value="remove" class="radio radio-sm">
+	        <span>Remove selection (keep everything else)</span>
+	      </label>
+	    </div>
+
+	    <!-- Submit -->
+	    <div class="pt-4 text-center">
+	      <button type="submit" class="btn btn-primary btn-lg">Trim</button>
+	    </div>
+	  </form>
+	</section>
+
+
+
+}
