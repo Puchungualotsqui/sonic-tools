@@ -92,6 +92,7 @@ templ Layout(content templ.Component) {
           });
 
           settingsObj["fileOrder"] = this.files.map(f => f.file.name);
+          settingsObj["tool"] = window.location.pathname.replace("/", "") || "home";
 
           settingsJSON = JSON.stringify(settingsObj);
         }
