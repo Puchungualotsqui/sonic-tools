@@ -1,0 +1,65 @@
+package settings
+
+
+templ Boost() {
+	<!-- Mode selection -->
+	 <div>
+	   <h3 class="text-lg font-semibold mb-3">Mode</h3>
+	   <div class="flex flex-col gap-2">
+	     <label class="flex items-center gap-2">
+	       <input type="radio" name="mode" value="boost" class="radio radio-sm" checked>
+	       <span>Boost (manual gain)</span>
+	     </label>
+	     <label class="flex items-center gap-2">
+	       <input type="radio" name="mode" value="normalize" class="radio radio-sm">
+	       <span>Normalize (auto level)</span>
+	     </label>
+	   </div>
+	 </div>
+
+	 <!-- Gain slider -->
+	<div id="gainInput" class="space-y-2">
+	<label class="font-medium">Gain (dB)</label>
+	<input
+	  type="range"
+	  name="gain"
+	  id="gainRange"
+	  min="-20"
+	  max="20"
+	  value="0"
+	  class="range"
+	/>
+	<div class="flex justify-between text-base font-medium px-1">
+	  <span>-20 dB</span>
+	  <span id="gainValue">0 dB</span>
+	  <span>+20 dB</span>
+	</div>
+	</div>
+
+	<script>
+	  const modeRadios = document.querySelectorAll('input[name="mode"]');
+	  const gainDiv = document.getElementById('gainInput');
+	  const gainRange = document.getElementById('gainRange');
+	  const gainValue = document.getElementById('gainValue');
+
+	  // Update value when slider moves
+	  gainRange.addEventListener('input', () => {
+	    gainValue.textContent = `${gainRange.value} dB`;
+	  });
+
+	  // Toggle gain slider visibility based on mode
+	  modeRadios.forEach(radio => {
+	    radio.addEventListener('change', () => {
+	      if (radio.value === 'boost') {
+	        gainDiv.classList.remove('hidden');
+	      } else {
+	        gainDiv.classList.add('hidden');
+	      }
+	    });
+	  });
+	</script>
+
+
+
+
+}

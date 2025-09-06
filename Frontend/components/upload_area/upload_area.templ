@@ -1,13 +1,13 @@
 package upload_area
 
 templ UploadArea() {
-  <div class="mb-8 space-y-4" x-data="uploadArea()">
+  <div class="mb-8 space-y-4" x-data>
     <!-- Drop Area -->
     <label
       for="fileInput"
       class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer bg-base-200 hover:bg-base-300"
       x-on:dragover.prevent
-      x-on:drop.prevent="addFiles($event.dataTransfer.files)"
+      x-on:drop.prevent="$store.uploader.addFiles($event.dataTransfer.files)"
     >
       <div class="flex flex-col items-center justify-center pt-5 pb-6">
         <svg class="w-10 h-10 mb-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,73 +25,36 @@ templ UploadArea() {
         accept=".mp3,.wav,.flac,.ogg,.aac,.m4a"
         multiple
         class="hidden"
-        x-on:change="onPickerChange($event)"
+        x-on:change="$store.uploader.addFiles($event.target.files); $event.target.value='';"
       />
     </label>
 
     <!-- Uploaded Files List -->
     <div id="uploadedFiles" class="space-y-2">
-      <template x-for="item in files" :key="item.id">
-        <div class="p-2 bg-base-200 rounded-lg">
-          <div class="flex items-center justify-between text-sm">
-            <div class="truncate">
-              <span class="font-medium truncate" x-text="item.file.name"></span>
-              <span class="opacity-60 ml-2" x-text="formatSize(item.file.size)"></span>
+
+	    <template x-for="item in $store.uploader.files" :key="item.id">
+          <div class="p-2 bg-base-200 rounded-lg">
+            <div class="flex items-center justify-between text-sm">
+              <div class="truncate">
+                <span class="font-medium truncate" x-text="item.file.name"></span>
+                <span class="opacity-60 ml-2" x-text="$store.uploader.formatSize(item.file.size)"></span>
+              </div>
             </div>
-            <button type="button" class="btn btn-ghost btn-xs" x-on:click="remove(item.id)">✕</button>
+            <progress class="progress progress-primary w-full mt-1" :value="item.progress" max="100"></progress>
           </div>
-          <progress class="progress progress-primary w-full mt-1" :value="item.progress" max="100"></progress>
-        </div>
-      </template>
+        </template>
 
       <!-- Feedback for skipped files -->
-      <p class="text-xs text-error" x-show="rejectedCount > 0" x-text="`${rejectedCount} file(s) skipped (invalid type)`"></p>
+      <p class="text-xs text-error"
+         x-show="$store.uploader.rejectedCount > 0"
+         x-text="`${$store.uploader.rejectedCount} file(s) skipped (invalid type)`">
+      </p>
+
     </div>
   </div>
 
   <!-- Alpine component (define once on the page; safe inline here) -->
   <script>
-    document.addEventListener('alpine:init', () => {
-      Alpine.data('uploadArea', () => ({
-        files: [],
-        rejectedCount: 0,
-        allowedExts: ['.mp3', '.wav', '.flac', '.ogg', '.aac', '.m4a'],
 
-        onPickerChange(e) {
-          this.addFiles(e.target.files);
-          // allow picking the same file again later
-          e.target.value = '';
-        },
-
-        addFiles(fileList) {
-          const incoming = Array.from(fileList);
-          let rejects = 0;
-
-          incoming.forEach(f => {
-            if (!this.isAllowed(f)) { rejects++; return; }
-            const id = `${f.name}-${f.size}-${f.lastModified}`;
-            // de-dupe by name+size+mtime
-            if (!this.files.some(x => x.id === id)) {
-              this.files.push({ id, file: f, progress: 0 });
-            }
-          });
-
-          this.rejectedCount += rejects;
-        },
-
-        remove(id) {
-          this.files = this.files.filter(x => x.id !== id);
-        },
-
-        isAllowed(file) {
-          const name = file.name.toLowerCase();
-          return this.allowedExts.some(ext => name.endsWith(ext));
-        },
-
-        formatSize(bytes) {
-          return (bytes / 1024 / 1024).toFixed(2) + ' MB';
-        }
-      }));
-    });
   </script>
 }

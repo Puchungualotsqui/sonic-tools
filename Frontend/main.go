@@ -1,33 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/Puchungualotsqui/sonic-tools/components/body"
-	"github.com/Puchungualotsqui/sonic-tools/views"
+	"frontend/components/body"
+	"frontend/components/settings"
+	"frontend/views"
+
 	"github.com/a-h/templ"
 )
-
-func uploadHandler(w http.ResponseWriter, r *http.Request) {
-	// Parse uploaded file(s)
-	r.ParseMultipartForm(10 << 20) // 10MB max just for demo
-	files := r.MultipartForm.File["files"]
-
-	for _, fileHeader := range files {
-		// Just print an HTML row per file (HTMX will inject this)
-		fmt.Fprintf(w, `
-		  <div class="p-2 bg-base-200 rounded-lg">
-		    <div class="flex justify-between text-sm">
-		      <span>%s</span>
-		      <span>%.2f MB</span>
-		    </div>
-		    <progress class="progress progress-primary w-full mt-1" value="100" max="100"></progress>
-		  </div>
-		`, fileHeader.Filename, float64(fileHeader.Size)/(1024*1024))
-	}
-}
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -37,17 +19,17 @@ func main() {
 		case "/":
 			bodyContent = body.Home()
 		case "/compress":
-			bodyContent = body.Compress()
+			bodyContent = body.Tool("🎚️ Compress Your Audio", "Compress", settings.Compress())
 		case "/convert":
-			bodyContent = body.Convert()
+			bodyContent = body.Tool("🔄 Convert Your Audio", "Convert", settings.Convert())
 		case "/trim":
-			bodyContent = body.Trim()
+			bodyContent = body.Tool("✂️ Trim Your Audio", "Trim", settings.Trim())
 		case "/merge":
-			bodyContent = body.Merge()
+			bodyContent = body.Tool("➕ Merge Your Audio", "Merge", settings.Merge())
 		case "/metadata":
-			bodyContent = body.Metadata()
+			bodyContent = body.Tool("🏷️ Edit Metadata", "Save metadata", settings.Metadata())
 		case "/boost":
-			bodyContent = body.Boost()
+			bodyContent = body.Tool("🔊 Volume Booster", "Apply", settings.Boost())
 		default:
 			http.NotFound(w, r)
 			return
@@ -64,9 +46,7 @@ func main() {
 		views.Layout(bodyContent).Render(r.Context(), w)
 	})
 
-	log.Println("Server running at http://localhost:3000")
+	log.Println("Frontend running at http://localhost:3000")
 	log.Fatal(http.ListenAndServe(":3000", nil))
 
-	http.HandleFunc("/upload", uploadHandler)
-	http.ListenAndServe(":8080", nil)
 }

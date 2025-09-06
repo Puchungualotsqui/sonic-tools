@@ -1,8 +1,8 @@
 package views
 
 import (
-	 "github.com/Puchungualotsqui/sonic-tools/components/header"
-	"github.com/Puchungualotsqui/sonic-tools/components/footer"
+	 "frontend/components/header"
+	"frontend/components/footer"
 )
 
 templ Layout(content templ.Component) {
@@ -22,17 +22,145 @@ templ Layout(content templ.Component) {
 
 			<!-- Alpine.js -->
 			<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+			<script>
+            document.addEventListener("DOMContentLoaded", () => {
+              document.body.addEventListener("htmx:afterSwap", (e) => {
+                if (e.detail.target.id === "body-container") {
+                  // Reset uploader store when switching tools
+                  Alpine.store('uploader').files = [];
+                  Alpine.store('uploader').rejectedCount = 0;
+
+                  // Also reset hidden file input if you want
+                  const input = document.querySelector('#fileInput');
+                  if (input) input.value = '';
+                }
+              });
+            });
+            </script>
+
+
+  <script defer>
+  document.addEventListener('alpine:init', () => {
+    Alpine.store('uploader', {
+      files: [],
+      rejectedCount: 0,
+      allowedExts: ['.mp3', '.wav', '.flac', '.ogg', '.aac', '.m4a'],
+
+      addFiles(fileList) {
+        const incoming = Array.from(fileList);
+        let rejects = 0;
+
+        incoming.forEach(f => {
+          if (!this.isAllowed(f)) { rejects++; return; }
+          const id = `${f.name}-${f.size}-${f.lastModified}`;
+          if (!this.files.some(x => x.id === id)) {
+            this.files.push({ id, file: f, progress: 0 });
+          }
+        });
+
+        this.rejectedCount += rejects;
+      },
+
+      isAllowed(file) {
+        return this.allowedExts.some(ext => file.name.toLowerCase().endsWith(ext));
+      },
+
+      formatSize(bytes) {
+        return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+      },
+
+      async upload() {
+        if (this.files.length === 0) return;
+
+        const form = document.querySelector('#toolForm');
+        let settingsJSON = "{}"; // default empty
+        if (form) {
+          const settingsObj = {};
+          new FormData(form).forEach((value, key) => {
+            if (key === "files") return;
+
+            if (settingsObj[key]) {
+              if (Array.isArray(settingsObj[key])) {
+                settingsObj[key].push(value);
+              } else {
+                settingsObj[key] = [settingsObj[key], value];
+              }
+            } else {
+              settingsObj[key] = value;
+            }
+          });
+
+          settingsObj["fileOrder"] = this.files.map(f => f.file.name);
+
+          settingsJSON = JSON.stringify(settingsObj);
+        }
+
+        await Promise.all(this.files.map(item =>
+          new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append("files", item.file);
+            formData.append("settings", settingsJSON);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/api/upload", true);
+            xhr.responseType = "blob";
+
+            xhr.upload.onprogress = (e) => {
+              if (e.lengthComputable) {
+                item.progress = (e.loaded / e.total) * 100;
+              }
+            };
+
+            xhr.onload = () => {
+              if (xhr.status === 200) {
+                const blob = xhr.response;
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+
+                const disposition = xhr.getResponseHeader("Content-Disposition");
+                let filename = item.file.name;
+                if (disposition && disposition.includes("filename=")) {
+                  filename = disposition.split("filename=")[1].replace(/"/g, "");
+                }
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                item.progress = 100;
+                resolve();
+              } else {
+                reject(new Error("Upload failed for " + item.file.name));
+              }
+            };
+
+            xhr.onerror = () => reject(new Error("Network error on " + item.file.name));
+            xhr.send(formData);
+          })
+        ));
+      }
+    });
+  });
+</script>
 		</head>
-		<body class="min-h-screen flex flex-col bg-base-200" >
+		<body class="min-h-screen flex flex-col bg-base-200" x-data>
 			<div id="header-container">
 				@header.Header()
 			</div>
 			<div id="body-container">
 				@content
 			</div>
-			<div id="footer-container">
+
+
+			<div id="footer-container" >
 				@footer.Footer()
 			</div>
 			</body>
 		</html>
+
+		<script>
+
+
+		</script>
 }

@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"github.com/Puchungualotsqui/sonic-tools/components/card"
+	"frontend/components/card"
 )
 
 func Home() templ.Component {

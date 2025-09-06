@@ -1,0 +1,9 @@
+package apply_button
+
+templ ApplyButton(text string) {
+	<div class="pt-4 text-center">
+	   <button type="button" class="btn btn-primary btn-lg" x-on:click="$store.uploader.upload()">
+			{ text }
+		</button>
+	 </div>
+}

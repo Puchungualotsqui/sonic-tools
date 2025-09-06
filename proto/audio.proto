@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package audio;
+
+option go_package = "backend/proto;audio";
+
+service AudioProcessor {
+    rpc Trim(TrimRequest) returns (AudioResponse);
+}
+
+message TrimRequest {
+    bytes file_data = 1;
+    int32 start_ms = 2;
+    int32 end_ms = 3;
+}
+
+message AudioResponse {
+    bytes file_data = 1;
+    string format = 2;
+}

@@ -1,4 +1,4 @@
-module github.com/Puchungualotsqui/sonic-tools
+module frontend
 
 go 1.24.6
 

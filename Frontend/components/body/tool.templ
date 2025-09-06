@@ -1,0 +1,24 @@
+package body
+
+import (
+	"frontend/components/upload_area"
+	"frontend/components/apply_button"
+)
+
+templ Tool(title, buttonText string, settings templ.Component) {
+	<section class="pt-8 pb-12 px-6 max-w-3xl mx-auto">
+	  <h2 class="text-3xl font-bold text-center mb-8">{ title }</h2>
+
+	<form  action="/upload" method="post" enctype="multipart/form-data" id="toolForm">
+
+	  <!-- Upload area -->
+	  @upload_area.UploadArea()
+
+	  @settings
+
+	  <!-- Submit -->
+	  @apply_button.ApplyButton(buttonText)
+	  </form>
+	</section>
+
+}

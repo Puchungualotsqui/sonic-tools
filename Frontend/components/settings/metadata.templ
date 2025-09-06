@@ -1,0 +1,64 @@
+package settings
+
+templ Metadata() {
+	<!-- Title -->
+ <div>
+   <label class="font-medium">Title</label>
+   <input
+     type="text"
+     name="title"
+     placeholder="Song Title"
+     class="input input-bordered w-full placeholder:text-gray-400 placeholder:opacity-60"
+   />
+ </div>
+
+ <!-- Artist -->
+ <div>
+   <label class="font-medium">Artist</label>
+   <input
+     type="text"
+     name="artist"
+     placeholder="Artist Name"
+     class="input input-bordered w-full placeholder:text-gray-400 placeholder:opacity-60"
+   />
+ </div>
+
+ <!-- Album -->
+ <div>
+   <label class="font-medium">Album</label>
+   <input
+     type="text"
+     name="album"
+     placeholder="Album Name"
+     class="input input-bordered w-full placeholder:text-gray-400 placeholder:opacity-60"
+   />
+ </div>
+
+ <!-- Year -->
+ <div>
+   <label class="font-medium">Year</label>
+   <input
+     type="number"
+     name="year"
+     min="1900"
+     max="2100"
+     step="1"
+     placeholder="2025"
+     class="input input-bordered w-full placeholder:text-gray-400 placeholder:opacity-60"
+     onkeydown="return event.key >= '0' && event.key <= '9' || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'"
+   />
+ </div>
+
+ <!-- Cover Art -->
+ <div>
+   <label class="font-medium">Cover Art</label>
+   <input
+     type="file"
+     name="cover"
+     accept="image/*"
+     class="file-input file-input-bordered w-full"
+   />
+   <p class="text-xs opacity-70 mt-1">Optional. JPG or PNG recommended.</p>
+ </div>
+
+}
