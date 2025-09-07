@@ -40,7 +40,8 @@ func ReadConfig(r *http.Request) (map[string]any, error) {
 		return nil, fmt.Errorf("failed to parse settings JSON: %w", err)
 	}
 
-	fmt.Printf("Parsed settings \n")
+	delete(settings, "cover")
+
 	return settings, nil
 }
 

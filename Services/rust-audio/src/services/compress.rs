@@ -2,7 +2,8 @@ use crate::audio::{
     AudioResponse, CompressPercentageRequest, CompressQualityRequest, CompressSizeRequest,
     compress_audio_server::CompressAudio,
 };
-use crate::utils::ffmpeg::{compress_file, probe_bitrate, probe_duration};
+use crate::utils::compress::compress_file;
+use crate::utils::ffmpeg::{probe_bitrate, probe_duration};
 use crate::utils::zip::make_zip;
 use tonic::{Request, Response, Status};
 

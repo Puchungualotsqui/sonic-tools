@@ -120,6 +120,30 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "trim failed: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+	case "merge":
+		format := utils.TryGetValue(settings, "format", "mp3")
+		resp, err = services.Merge(fileData, fileNames, format)
+		if err != nil {
+			http.Error(w, "Merge failed: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+	case "metadata":
+		title := utils.TryGetValue(settings, "title", "")
+		artist := utils.TryGetValue(settings, "artist", "")
+		album := utils.TryGetValue(settings, "album", "")
+		year := utils.TryGetValue(settings, "year", "")
+		cover, err := services.GetCover(r)
+		if err != nil {
+			http.Error(w, "Failed to process cover: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		resp, err = services.Metadata(fileData[0], fileNames[0], title, artist, album, year, cover)
+		if err != nil {
+			http.Error(w, "Metadata change failed: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 
 	// Set headers so browser downloads the file

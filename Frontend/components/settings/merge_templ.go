@@ -29,7 +29,7 @@ func Merge() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div><h3 class=\"text-lg font-semibold mb-3\">Output Format</h3><select name=\"format\" class=\"select select-bordered w-full\"><option value=\"mp3\" selected>MP3</option> <option value=\"wav\">WAV</option> <option value=\"flac\">FLAC</option> <option value=\"ogg\">OGG</option> <option value=\"aac\">AAC</option> <option value=\"m4a\">M4A</option></select></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div><h3 class=\"text-lg font-semibold mb-3\">Output Format</h3><select name=\"format\" class=\"select select-bordered w-full\"><option value=\"mp3\" selected>MP3</option> <option value=\"wav\">WAV</option> <option value=\"flac\">FLAC</option> <option value=\"ogg\">OGG</option> <option value=\"opus\">OPUS</option> <option value=\"aiff\">AIFF</option></select></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

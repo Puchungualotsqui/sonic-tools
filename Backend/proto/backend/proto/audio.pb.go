@@ -468,11 +468,11 @@ func (x *MergeRequest) GetOutputFormat() string {
 type MetadataRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FileData      []byte                 `protobuf:"bytes,1,opt,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
-	Filenames     string                 `protobuf:"bytes,2,opt,name=filenames,proto3" json:"filenames,omitempty"`
+	Filename      string                 `protobuf:"bytes,2,opt,name=filename,proto3" json:"filename,omitempty"`
 	Title         *string                `protobuf:"bytes,3,opt,name=title,proto3,oneof" json:"title,omitempty"`
 	Artist        *string                `protobuf:"bytes,4,opt,name=artist,proto3,oneof" json:"artist,omitempty"`
 	Album         *string                `protobuf:"bytes,5,opt,name=album,proto3,oneof" json:"album,omitempty"`
-	Year          *int32                 `protobuf:"varint,6,opt,name=year,proto3,oneof" json:"year,omitempty"`
+	Year          *string                `protobuf:"bytes,6,opt,name=year,proto3,oneof" json:"year,omitempty"`
 	CoverArt      []byte                 `protobuf:"bytes,7,opt,name=cover_art,json=coverArt,proto3,oneof" json:"cover_art,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -515,9 +515,9 @@ func (x *MetadataRequest) GetFileData() []byte {
 	return nil
 }
 
-func (x *MetadataRequest) GetFilenames() string {
+func (x *MetadataRequest) GetFilename() string {
 	if x != nil {
-		return x.Filenames
+		return x.Filename
 	}
 	return ""
 }
@@ -543,11 +543,11 @@ func (x *MetadataRequest) GetAlbum() string {
 	return ""
 }
 
-func (x *MetadataRequest) GetYear() int32 {
+func (x *MetadataRequest) GetYear() string {
 	if x != nil && x.Year != nil {
 		return *x.Year
 	}
-	return 0
+	return ""
 }
 
 func (x *MetadataRequest) GetCoverArt() []byte {
@@ -709,14 +709,14 @@ const file_audio_proto_rawDesc = "" +
 	"\fMergeRequest\x12\x1b\n" +
 	"\tfile_data\x18\x01 \x03(\fR\bfileData\x12\x1c\n" +
 	"\tfilenames\x18\x02 \x03(\tR\tfilenames\x12#\n" +
-	"\routput_format\x18\x03 \x01(\tR\foutputFormat\"\x90\x02\n" +
+	"\routput_format\x18\x03 \x01(\tR\foutputFormat\"\x8e\x02\n" +
 	"\x0fMetadataRequest\x12\x1b\n" +
-	"\tfile_data\x18\x01 \x01(\fR\bfileData\x12\x1c\n" +
-	"\tfilenames\x18\x02 \x01(\tR\tfilenames\x12\x19\n" +
+	"\tfile_data\x18\x01 \x01(\fR\bfileData\x12\x1a\n" +
+	"\bfilename\x18\x02 \x01(\tR\bfilename\x12\x19\n" +
 	"\x05title\x18\x03 \x01(\tH\x00R\x05title\x88\x01\x01\x12\x1b\n" +
 	"\x06artist\x18\x04 \x01(\tH\x01R\x06artist\x88\x01\x01\x12\x19\n" +
 	"\x05album\x18\x05 \x01(\tH\x02R\x05album\x88\x01\x01\x12\x17\n" +
-	"\x04year\x18\x06 \x01(\x05H\x03R\x04year\x88\x01\x01\x12 \n" +
+	"\x04year\x18\x06 \x01(\tH\x03R\x04year\x88\x01\x01\x12 \n" +
 	"\tcover_art\x18\a \x01(\fH\x04R\bcoverArt\x88\x01\x01B\b\n" +
 	"\x06_titleB\t\n" +
 	"\a_artistB\b\n" +

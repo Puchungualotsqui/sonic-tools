@@ -78,11 +78,11 @@ service MetadataAudio {
 
 message MetadataRequest {
     bytes file_data = 1;
-    string filenames = 2;
+    string filename = 2;
     optional string title = 3;
     optional string artist = 4;
     optional string album = 5;
-    optional int32 year = 6;
+    optional string year = 6;
     optional bytes cover_art = 7;
 }
 

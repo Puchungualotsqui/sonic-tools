@@ -1,5 +1,5 @@
 use crate::audio::{AudioResponse, TrimRequest, trim_audio_server::TrimAudio};
-use crate::utils::ffmpeg::trim_file;
+use crate::utils::trim::trim_file;
 use tonic::{Request, Response, Status};
 
 #[derive(Debug, Default)]
