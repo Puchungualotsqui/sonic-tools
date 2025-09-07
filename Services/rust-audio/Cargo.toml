@@ -6,9 +6,10 @@ edition = "2024"
 [dependencies]
 tonic = "0.11"
 prost = "0.12"
-tokio = { version = "1", features = ["mp3", "wav", "flac", "ogg", "aac", "m4a"] }
+tokio = { version = "1", features = ["full"] }
 hound = "3.5"
-symphonia = { version = "0.5", features = ["mp3", "wav", "flac", "ogg", "aac", "m4a"] }
+symphonia = { version = "0.5", features = ["mp3", "wav", "flac", "ogg", "aac"] }
+zip = "5.0.0"
 
 [build-dependencies]
 tonic-build = "0.11"

@@ -21,77 +21,18 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type TrimRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	FileData      []byte                 `protobuf:"bytes,1,opt,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
-	StartMs       int32                  `protobuf:"varint,2,opt,name=start_ms,json=startMs,proto3" json:"start_ms,omitempty"`
-	EndMs         int32                  `protobuf:"varint,3,opt,name=end_ms,json=endMs,proto3" json:"end_ms,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *TrimRequest) Reset() {
-	*x = TrimRequest{}
-	mi := &file_audio_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TrimRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TrimRequest) ProtoMessage() {}
-
-func (x *TrimRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_audio_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TrimRequest.ProtoReflect.Descriptor instead.
-func (*TrimRequest) Descriptor() ([]byte, []int) {
-	return file_audio_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *TrimRequest) GetFileData() []byte {
-	if x != nil {
-		return x.FileData
-	}
-	return nil
-}
-
-func (x *TrimRequest) GetStartMs() int32 {
-	if x != nil {
-		return x.StartMs
-	}
-	return 0
-}
-
-func (x *TrimRequest) GetEndMs() int32 {
-	if x != nil {
-		return x.EndMs
-	}
-	return 0
-}
-
 type AudioResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FileData      []byte                 `protobuf:"bytes,1,opt,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
 	Format        string                 `protobuf:"bytes,2,opt,name=format,proto3" json:"format,omitempty"`
+	Filename      string                 `protobuf:"bytes,3,opt,name=filename,proto3" json:"filename,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AudioResponse) Reset() {
 	*x = AudioResponse{}
-	mi := &file_audio_proto_msgTypes[1]
+	mi := &file_audio_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -103,7 +44,7 @@ func (x *AudioResponse) String() string {
 func (*AudioResponse) ProtoMessage() {}
 
 func (x *AudioResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_audio_proto_msgTypes[1]
+	mi := &file_audio_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -116,7 +57,7 @@ func (x *AudioResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AudioResponse.ProtoReflect.Descriptor instead.
 func (*AudioResponse) Descriptor() ([]byte, []int) {
-	return file_audio_proto_rawDescGZIP(), []int{1}
+	return file_audio_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *AudioResponse) GetFileData() []byte {
@@ -133,20 +74,679 @@ func (x *AudioResponse) GetFormat() string {
 	return ""
 }
 
+func (x *AudioResponse) GetFilename() string {
+	if x != nil {
+		return x.Filename
+	}
+	return ""
+}
+
+type CompressPercentageRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileData      [][]byte               `protobuf:"bytes,1,rep,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
+	Filenames     []string               `protobuf:"bytes,2,rep,name=filenames,proto3" json:"filenames,omitempty"`
+	Percentage    int32                  `protobuf:"varint,3,opt,name=percentage,proto3" json:"percentage,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CompressPercentageRequest) Reset() {
+	*x = CompressPercentageRequest{}
+	mi := &file_audio_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CompressPercentageRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CompressPercentageRequest) ProtoMessage() {}
+
+func (x *CompressPercentageRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_audio_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CompressPercentageRequest.ProtoReflect.Descriptor instead.
+func (*CompressPercentageRequest) Descriptor() ([]byte, []int) {
+	return file_audio_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CompressPercentageRequest) GetFileData() [][]byte {
+	if x != nil {
+		return x.FileData
+	}
+	return nil
+}
+
+func (x *CompressPercentageRequest) GetFilenames() []string {
+	if x != nil {
+		return x.Filenames
+	}
+	return nil
+}
+
+func (x *CompressPercentageRequest) GetPercentage() int32 {
+	if x != nil {
+		return x.Percentage
+	}
+	return 0
+}
+
+type CompressSizeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileData      [][]byte               `protobuf:"bytes,1,rep,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
+	Filenames     []string               `protobuf:"bytes,2,rep,name=filenames,proto3" json:"filenames,omitempty"`
+	Size          int32                  `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CompressSizeRequest) Reset() {
+	*x = CompressSizeRequest{}
+	mi := &file_audio_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CompressSizeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CompressSizeRequest) ProtoMessage() {}
+
+func (x *CompressSizeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_audio_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CompressSizeRequest.ProtoReflect.Descriptor instead.
+func (*CompressSizeRequest) Descriptor() ([]byte, []int) {
+	return file_audio_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *CompressSizeRequest) GetFileData() [][]byte {
+	if x != nil {
+		return x.FileData
+	}
+	return nil
+}
+
+func (x *CompressSizeRequest) GetFilenames() []string {
+	if x != nil {
+		return x.Filenames
+	}
+	return nil
+}
+
+func (x *CompressSizeRequest) GetSize() int32 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
+type CompressQualityRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileData      [][]byte               `protobuf:"bytes,1,rep,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
+	Filenames     []string               `protobuf:"bytes,2,rep,name=filenames,proto3" json:"filenames,omitempty"`
+	Quality       string                 `protobuf:"bytes,3,opt,name=quality,proto3" json:"quality,omitempty"` // low, medium, high
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CompressQualityRequest) Reset() {
+	*x = CompressQualityRequest{}
+	mi := &file_audio_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CompressQualityRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CompressQualityRequest) ProtoMessage() {}
+
+func (x *CompressQualityRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_audio_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CompressQualityRequest.ProtoReflect.Descriptor instead.
+func (*CompressQualityRequest) Descriptor() ([]byte, []int) {
+	return file_audio_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *CompressQualityRequest) GetFileData() [][]byte {
+	if x != nil {
+		return x.FileData
+	}
+	return nil
+}
+
+func (x *CompressQualityRequest) GetFilenames() []string {
+	if x != nil {
+		return x.Filenames
+	}
+	return nil
+}
+
+func (x *CompressQualityRequest) GetQuality() string {
+	if x != nil {
+		return x.Quality
+	}
+	return ""
+}
+
+type ConvertRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileData      [][]byte               `protobuf:"bytes,1,rep,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
+	Filenames     []string               `protobuf:"bytes,2,rep,name=filenames,proto3" json:"filenames,omitempty"`
+	OutputFormat  string                 `protobuf:"bytes,3,opt,name=output_format,json=outputFormat,proto3" json:"output_format,omitempty"`
+	Bitrate       int32                  `protobuf:"varint,4,opt,name=bitrate,proto3" json:"bitrate,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ConvertRequest) Reset() {
+	*x = ConvertRequest{}
+	mi := &file_audio_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConvertRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConvertRequest) ProtoMessage() {}
+
+func (x *ConvertRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_audio_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConvertRequest.ProtoReflect.Descriptor instead.
+func (*ConvertRequest) Descriptor() ([]byte, []int) {
+	return file_audio_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ConvertRequest) GetFileData() [][]byte {
+	if x != nil {
+		return x.FileData
+	}
+	return nil
+}
+
+func (x *ConvertRequest) GetFilenames() []string {
+	if x != nil {
+		return x.Filenames
+	}
+	return nil
+}
+
+func (x *ConvertRequest) GetOutputFormat() string {
+	if x != nil {
+		return x.OutputFormat
+	}
+	return ""
+}
+
+func (x *ConvertRequest) GetBitrate() int32 {
+	if x != nil {
+		return x.Bitrate
+	}
+	return 0
+}
+
+type TrimRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileData      []byte                 `protobuf:"bytes,1,opt,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
+	Filenames     string                 `protobuf:"bytes,2,opt,name=filenames,proto3" json:"filenames,omitempty"`
+	StartMs       *int32                 `protobuf:"varint,3,opt,name=start_ms,json=startMs,proto3,oneof" json:"start_ms,omitempty"`
+	EndMs         *int32                 `protobuf:"varint,4,opt,name=end_ms,json=endMs,proto3,oneof" json:"end_ms,omitempty"`
+	Action        string                 `protobuf:"bytes,5,opt,name=action,proto3" json:"action,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TrimRequest) Reset() {
+	*x = TrimRequest{}
+	mi := &file_audio_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TrimRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TrimRequest) ProtoMessage() {}
+
+func (x *TrimRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_audio_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TrimRequest.ProtoReflect.Descriptor instead.
+func (*TrimRequest) Descriptor() ([]byte, []int) {
+	return file_audio_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *TrimRequest) GetFileData() []byte {
+	if x != nil {
+		return x.FileData
+	}
+	return nil
+}
+
+func (x *TrimRequest) GetFilenames() string {
+	if x != nil {
+		return x.Filenames
+	}
+	return ""
+}
+
+func (x *TrimRequest) GetStartMs() int32 {
+	if x != nil && x.StartMs != nil {
+		return *x.StartMs
+	}
+	return 0
+}
+
+func (x *TrimRequest) GetEndMs() int32 {
+	if x != nil && x.EndMs != nil {
+		return *x.EndMs
+	}
+	return 0
+}
+
+func (x *TrimRequest) GetAction() string {
+	if x != nil {
+		return x.Action
+	}
+	return ""
+}
+
+type MergeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileData      [][]byte               `protobuf:"bytes,1,rep,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
+	Filenames     []string               `protobuf:"bytes,2,rep,name=filenames,proto3" json:"filenames,omitempty"`
+	OutputFormat  string                 `protobuf:"bytes,3,opt,name=output_format,json=outputFormat,proto3" json:"output_format,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MergeRequest) Reset() {
+	*x = MergeRequest{}
+	mi := &file_audio_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MergeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MergeRequest) ProtoMessage() {}
+
+func (x *MergeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_audio_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MergeRequest.ProtoReflect.Descriptor instead.
+func (*MergeRequest) Descriptor() ([]byte, []int) {
+	return file_audio_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *MergeRequest) GetFileData() [][]byte {
+	if x != nil {
+		return x.FileData
+	}
+	return nil
+}
+
+func (x *MergeRequest) GetFilenames() []string {
+	if x != nil {
+		return x.Filenames
+	}
+	return nil
+}
+
+func (x *MergeRequest) GetOutputFormat() string {
+	if x != nil {
+		return x.OutputFormat
+	}
+	return ""
+}
+
+type MetadataRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileData      []byte                 `protobuf:"bytes,1,opt,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
+	Filenames     string                 `protobuf:"bytes,2,opt,name=filenames,proto3" json:"filenames,omitempty"`
+	Title         *string                `protobuf:"bytes,3,opt,name=title,proto3,oneof" json:"title,omitempty"`
+	Artist        *string                `protobuf:"bytes,4,opt,name=artist,proto3,oneof" json:"artist,omitempty"`
+	Album         *string                `protobuf:"bytes,5,opt,name=album,proto3,oneof" json:"album,omitempty"`
+	Year          *int32                 `protobuf:"varint,6,opt,name=year,proto3,oneof" json:"year,omitempty"`
+	CoverArt      []byte                 `protobuf:"bytes,7,opt,name=cover_art,json=coverArt,proto3,oneof" json:"cover_art,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MetadataRequest) Reset() {
+	*x = MetadataRequest{}
+	mi := &file_audio_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MetadataRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MetadataRequest) ProtoMessage() {}
+
+func (x *MetadataRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_audio_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MetadataRequest.ProtoReflect.Descriptor instead.
+func (*MetadataRequest) Descriptor() ([]byte, []int) {
+	return file_audio_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *MetadataRequest) GetFileData() []byte {
+	if x != nil {
+		return x.FileData
+	}
+	return nil
+}
+
+func (x *MetadataRequest) GetFilenames() string {
+	if x != nil {
+		return x.Filenames
+	}
+	return ""
+}
+
+func (x *MetadataRequest) GetTitle() string {
+	if x != nil && x.Title != nil {
+		return *x.Title
+	}
+	return ""
+}
+
+func (x *MetadataRequest) GetArtist() string {
+	if x != nil && x.Artist != nil {
+		return *x.Artist
+	}
+	return ""
+}
+
+func (x *MetadataRequest) GetAlbum() string {
+	if x != nil && x.Album != nil {
+		return *x.Album
+	}
+	return ""
+}
+
+func (x *MetadataRequest) GetYear() int32 {
+	if x != nil && x.Year != nil {
+		return *x.Year
+	}
+	return 0
+}
+
+func (x *MetadataRequest) GetCoverArt() []byte {
+	if x != nil {
+		return x.CoverArt
+	}
+	return nil
+}
+
+type BoostManualRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileData      [][]byte               `protobuf:"bytes,1,rep,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
+	Filenames     []string               `protobuf:"bytes,2,rep,name=filenames,proto3" json:"filenames,omitempty"`
+	Gain          int32                  `protobuf:"varint,3,opt,name=gain,proto3" json:"gain,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BoostManualRequest) Reset() {
+	*x = BoostManualRequest{}
+	mi := &file_audio_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BoostManualRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BoostManualRequest) ProtoMessage() {}
+
+func (x *BoostManualRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_audio_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BoostManualRequest.ProtoReflect.Descriptor instead.
+func (*BoostManualRequest) Descriptor() ([]byte, []int) {
+	return file_audio_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *BoostManualRequest) GetFileData() [][]byte {
+	if x != nil {
+		return x.FileData
+	}
+	return nil
+}
+
+func (x *BoostManualRequest) GetFilenames() []string {
+	if x != nil {
+		return x.Filenames
+	}
+	return nil
+}
+
+func (x *BoostManualRequest) GetGain() int32 {
+	if x != nil {
+		return x.Gain
+	}
+	return 0
+}
+
+type BoostNormalizeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileData      [][]byte               `protobuf:"bytes,1,rep,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
+	Filenames     []string               `protobuf:"bytes,2,rep,name=filenames,proto3" json:"filenames,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BoostNormalizeRequest) Reset() {
+	*x = BoostNormalizeRequest{}
+	mi := &file_audio_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BoostNormalizeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BoostNormalizeRequest) ProtoMessage() {}
+
+func (x *BoostNormalizeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_audio_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BoostNormalizeRequest.ProtoReflect.Descriptor instead.
+func (*BoostNormalizeRequest) Descriptor() ([]byte, []int) {
+	return file_audio_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *BoostNormalizeRequest) GetFileData() [][]byte {
+	if x != nil {
+		return x.FileData
+	}
+	return nil
+}
+
+func (x *BoostNormalizeRequest) GetFilenames() []string {
+	if x != nil {
+		return x.Filenames
+	}
+	return nil
+}
+
 var File_audio_proto protoreflect.FileDescriptor
 
 const file_audio_proto_rawDesc = "" +
 	"\n" +
-	"\vaudio.proto\x12\x05audio\"\\\n" +
-	"\vTrimRequest\x12\x1b\n" +
-	"\tfile_data\x18\x01 \x01(\fR\bfileData\x12\x19\n" +
-	"\bstart_ms\x18\x02 \x01(\x05R\astartMs\x12\x15\n" +
-	"\x06end_ms\x18\x03 \x01(\x05R\x05endMs\"D\n" +
+	"\vaudio.proto\x12\x05audio\"`\n" +
 	"\rAudioResponse\x12\x1b\n" +
 	"\tfile_data\x18\x01 \x01(\fR\bfileData\x12\x16\n" +
-	"\x06format\x18\x02 \x01(\tR\x06format2B\n" +
-	"\x0eAudioProcessor\x120\n" +
-	"\x04Trim\x12\x12.audio.TrimRequest\x1a\x14.audio.AudioResponseB\x15Z\x13backend/proto;audiob\x06proto3"
+	"\x06format\x18\x02 \x01(\tR\x06format\x12\x1a\n" +
+	"\bfilename\x18\x03 \x01(\tR\bfilename\"v\n" +
+	"\x19CompressPercentageRequest\x12\x1b\n" +
+	"\tfile_data\x18\x01 \x03(\fR\bfileData\x12\x1c\n" +
+	"\tfilenames\x18\x02 \x03(\tR\tfilenames\x12\x1e\n" +
+	"\n" +
+	"percentage\x18\x03 \x01(\x05R\n" +
+	"percentage\"d\n" +
+	"\x13CompressSizeRequest\x12\x1b\n" +
+	"\tfile_data\x18\x01 \x03(\fR\bfileData\x12\x1c\n" +
+	"\tfilenames\x18\x02 \x03(\tR\tfilenames\x12\x12\n" +
+	"\x04size\x18\x03 \x01(\x05R\x04size\"m\n" +
+	"\x16CompressQualityRequest\x12\x1b\n" +
+	"\tfile_data\x18\x01 \x03(\fR\bfileData\x12\x1c\n" +
+	"\tfilenames\x18\x02 \x03(\tR\tfilenames\x12\x18\n" +
+	"\aquality\x18\x03 \x01(\tR\aquality\"\x8a\x01\n" +
+	"\x0eConvertRequest\x12\x1b\n" +
+	"\tfile_data\x18\x01 \x03(\fR\bfileData\x12\x1c\n" +
+	"\tfilenames\x18\x02 \x03(\tR\tfilenames\x12#\n" +
+	"\routput_format\x18\x03 \x01(\tR\foutputFormat\x12\x18\n" +
+	"\abitrate\x18\x04 \x01(\x05R\abitrate\"\xb4\x01\n" +
+	"\vTrimRequest\x12\x1b\n" +
+	"\tfile_data\x18\x01 \x01(\fR\bfileData\x12\x1c\n" +
+	"\tfilenames\x18\x02 \x01(\tR\tfilenames\x12\x1e\n" +
+	"\bstart_ms\x18\x03 \x01(\x05H\x00R\astartMs\x88\x01\x01\x12\x1a\n" +
+	"\x06end_ms\x18\x04 \x01(\x05H\x01R\x05endMs\x88\x01\x01\x12\x16\n" +
+	"\x06action\x18\x05 \x01(\tR\x06actionB\v\n" +
+	"\t_start_msB\t\n" +
+	"\a_end_ms\"n\n" +
+	"\fMergeRequest\x12\x1b\n" +
+	"\tfile_data\x18\x01 \x03(\fR\bfileData\x12\x1c\n" +
+	"\tfilenames\x18\x02 \x03(\tR\tfilenames\x12#\n" +
+	"\routput_format\x18\x03 \x01(\tR\foutputFormat\"\x90\x02\n" +
+	"\x0fMetadataRequest\x12\x1b\n" +
+	"\tfile_data\x18\x01 \x01(\fR\bfileData\x12\x1c\n" +
+	"\tfilenames\x18\x02 \x01(\tR\tfilenames\x12\x19\n" +
+	"\x05title\x18\x03 \x01(\tH\x00R\x05title\x88\x01\x01\x12\x1b\n" +
+	"\x06artist\x18\x04 \x01(\tH\x01R\x06artist\x88\x01\x01\x12\x19\n" +
+	"\x05album\x18\x05 \x01(\tH\x02R\x05album\x88\x01\x01\x12\x17\n" +
+	"\x04year\x18\x06 \x01(\x05H\x03R\x04year\x88\x01\x01\x12 \n" +
+	"\tcover_art\x18\a \x01(\fH\x04R\bcoverArt\x88\x01\x01B\b\n" +
+	"\x06_titleB\t\n" +
+	"\a_artistB\b\n" +
+	"\x06_albumB\a\n" +
+	"\x05_yearB\f\n" +
+	"\n" +
+	"_cover_art\"c\n" +
+	"\x12BoostManualRequest\x12\x1b\n" +
+	"\tfile_data\x18\x01 \x03(\fR\bfileData\x12\x1c\n" +
+	"\tfilenames\x18\x02 \x03(\tR\tfilenames\x12\x12\n" +
+	"\x04gain\x18\x03 \x01(\x05R\x04gain\"R\n" +
+	"\x15BoostNormalizeRequest\x12\x1b\n" +
+	"\tfile_data\x18\x01 \x03(\fR\bfileData\x12\x1c\n" +
+	"\tfilenames\x18\x02 \x03(\tR\tfilenames2\xe7\x01\n" +
+	"\rCompressAudio\x12L\n" +
+	"\x12CompressPercentage\x12 .audio.CompressPercentageRequest\x1a\x14.audio.AudioResponse\x12@\n" +
+	"\fCompressSize\x12\x1a.audio.CompressSizeRequest\x1a\x14.audio.AudioResponse\x12F\n" +
+	"\x0fCompressQuality\x12\x1d.audio.CompressQualityRequest\x1a\x14.audio.AudioResponse2F\n" +
+	"\fConvertAudio\x126\n" +
+	"\aConvert\x12\x15.audio.ConvertRequest\x1a\x14.audio.AudioResponse2=\n" +
+	"\tTrimAudio\x120\n" +
+	"\x04Trim\x12\x12.audio.TrimRequest\x1a\x14.audio.AudioResponse2@\n" +
+	"\n" +
+	"MergeAudio\x122\n" +
+	"\x05Merge\x12\x13.audio.MergeRequest\x1a\x14.audio.AudioResponse2I\n" +
+	"\rMetadataAudio\x128\n" +
+	"\bMetadata\x12\x16.audio.MetadataRequest\x1a\x14.audio.AudioResponse2\x92\x01\n" +
+	"\n" +
+	"BoostAudio\x12>\n" +
+	"\vBoostManual\x12\x19.audio.BoostManualRequest\x1a\x14.audio.AudioResponse\x12D\n" +
+	"\x0eBoostNormalize\x12\x1c.audio.BoostNormalizeRequest\x1a\x14.audio.AudioResponseB\x15Z\x13backend/proto;audiob\x06proto3"
 
 var (
 	file_audio_proto_rawDescOnce sync.Once
@@ -160,16 +760,40 @@ func file_audio_proto_rawDescGZIP() []byte {
 	return file_audio_proto_rawDescData
 }
 
-var file_audio_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_audio_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_audio_proto_goTypes = []any{
-	(*TrimRequest)(nil),   // 0: audio.TrimRequest
-	(*AudioResponse)(nil), // 1: audio.AudioResponse
+	(*AudioResponse)(nil),             // 0: audio.AudioResponse
+	(*CompressPercentageRequest)(nil), // 1: audio.CompressPercentageRequest
+	(*CompressSizeRequest)(nil),       // 2: audio.CompressSizeRequest
+	(*CompressQualityRequest)(nil),    // 3: audio.CompressQualityRequest
+	(*ConvertRequest)(nil),            // 4: audio.ConvertRequest
+	(*TrimRequest)(nil),               // 5: audio.TrimRequest
+	(*MergeRequest)(nil),              // 6: audio.MergeRequest
+	(*MetadataRequest)(nil),           // 7: audio.MetadataRequest
+	(*BoostManualRequest)(nil),        // 8: audio.BoostManualRequest
+	(*BoostNormalizeRequest)(nil),     // 9: audio.BoostNormalizeRequest
 }
 var file_audio_proto_depIdxs = []int32{
-	0, // 0: audio.AudioProcessor.Trim:input_type -> audio.TrimRequest
-	1, // 1: audio.AudioProcessor.Trim:output_type -> audio.AudioResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	1, // 0: audio.CompressAudio.CompressPercentage:input_type -> audio.CompressPercentageRequest
+	2, // 1: audio.CompressAudio.CompressSize:input_type -> audio.CompressSizeRequest
+	3, // 2: audio.CompressAudio.CompressQuality:input_type -> audio.CompressQualityRequest
+	4, // 3: audio.ConvertAudio.Convert:input_type -> audio.ConvertRequest
+	5, // 4: audio.TrimAudio.Trim:input_type -> audio.TrimRequest
+	6, // 5: audio.MergeAudio.Merge:input_type -> audio.MergeRequest
+	7, // 6: audio.MetadataAudio.Metadata:input_type -> audio.MetadataRequest
+	8, // 7: audio.BoostAudio.BoostManual:input_type -> audio.BoostManualRequest
+	9, // 8: audio.BoostAudio.BoostNormalize:input_type -> audio.BoostNormalizeRequest
+	0, // 9: audio.CompressAudio.CompressPercentage:output_type -> audio.AudioResponse
+	0, // 10: audio.CompressAudio.CompressSize:output_type -> audio.AudioResponse
+	0, // 11: audio.CompressAudio.CompressQuality:output_type -> audio.AudioResponse
+	0, // 12: audio.ConvertAudio.Convert:output_type -> audio.AudioResponse
+	0, // 13: audio.TrimAudio.Trim:output_type -> audio.AudioResponse
+	0, // 14: audio.MergeAudio.Merge:output_type -> audio.AudioResponse
+	0, // 15: audio.MetadataAudio.Metadata:output_type -> audio.AudioResponse
+	0, // 16: audio.BoostAudio.BoostManual:output_type -> audio.AudioResponse
+	0, // 17: audio.BoostAudio.BoostNormalize:output_type -> audio.AudioResponse
+	9, // [9:18] is the sub-list for method output_type
+	0, // [0:9] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -180,15 +804,17 @@ func file_audio_proto_init() {
 	if File_audio_proto != nil {
 		return
 	}
+	file_audio_proto_msgTypes[5].OneofWrappers = []any{}
+	file_audio_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_audio_proto_rawDesc), len(file_audio_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   10,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   6,
 		},
 		GoTypes:           file_audio_proto_goTypes,
 		DependencyIndexes: file_audio_proto_depIdxs,

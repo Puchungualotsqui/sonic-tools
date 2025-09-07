@@ -8,7 +8,7 @@ package upload_area
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func UploadArea() templ.Component {
+func UploadArea(accept string, multiple bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -29,7 +29,61 @@ func UploadArea() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-8 space-y-4\" x-data><!-- Drop Area --><label for=\"fileInput\" class=\"flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer bg-base-200 hover:bg-base-300\" x-on:dragover.prevent x-on:drop.prevent=\"$store.uploader.addFiles($event.dataTransfer.files)\"><div class=\"flex flex-col items-center justify-center pt-5 pb-6\"><svg class=\"w-10 h-10 mb-3 opacity-70\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M7 16a4 4 0 01-.88-7.903A5.002 5.002 0 0115.9 6H16a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12\"></path></svg><p class=\"mb-2 text-sm text-gray-500\">Click to upload or drag and drop</p><p class=\"text-xs text-gray-400\">MP3, WAV, FLAC, OGG, AAC, M4A</p></div><input id=\"fileInput\" type=\"file\" name=\"files\" accept=\".mp3,.wav,.flac,.ogg,.aac,.m4a\" multiple class=\"hidden\" x-on:change=\"$store.uploader.addFiles($event.target.files); $event.target.value='';\"></label><!-- Uploaded Files List --><div id=\"uploadedFiles\" class=\"space-y-2\"><template x-for=\"item in $store.uploader.files\" :key=\"item.id\"><div class=\"p-2 bg-base-200 rounded-lg\"><div class=\"flex items-center justify-between text-sm\"><div class=\"truncate\"><span class=\"font-medium truncate\" x-text=\"item.file.name\"></span> <span class=\"opacity-60 ml-2\" x-text=\"$store.uploader.formatSize(item.file.size)\"></span></div></div><progress class=\"progress progress-primary w-full mt-1\" :value=\"item.progress\" max=\"100\"></progress></div></template><!-- Feedback for skipped files --><p class=\"text-xs text-error\" x-show=\"$store.uploader.rejectedCount > 0\" x-text=\"`${$store.uploader.rejectedCount} file(s) skipped (invalid type)`\"></p></div></div><!-- Alpine component (define once on the page; safe inline here) --><script>\n\n  </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"mb-8 space-y-4\" x-data><!-- Drop Area --><label for=\"fileInput\" class=\"flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer bg-base-200 hover:bg-base-300\" x-on:dragover.prevent x-on:drop.prevent=\"$store.uploader.addFiles($event.dataTransfer.files)\"><div class=\"flex flex-col items-center justify-center pt-5 pb-6\"><svg class=\"w-10 h-10 mb-3 opacity-70\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M7 16a4 4 0 01-.88-7.903A5.002 5.002 0 0115.9 6H16a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12\"></path></svg><p class=\"mb-2 text-sm text-gray-500\">Click to upload or drag and drop</p><p class=\"text-xs text-gray-400\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(accept)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/upload_area/upload_area.templ`, Line: 18, Col: 49}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</p></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if multiple {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<input id=\"fileInput\" type=\"file\" name=\"files\" accept=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(accept)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/upload_area/upload_area.templ`, Line: 26, Col: 24}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" multiple class=\"hidden\" x-on:change=\"$store.uploader.addFiles($event.target.files); $event.target.value='';\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		} else {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<input id=\"fileInput\" type=\"file\" name=\"files\" accept=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(accept)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/upload_area/upload_area.templ`, Line: 36, Col: 24}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" class=\"hidden\" x-on:change=\"$store.uploader.addFiles($event.target.files); $event.target.value='';\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</label><!-- Uploaded Files List --><div id=\"uploadedFiles\" class=\"space-y-2\"><template x-for=\"item in $store.uploader.files\" :key=\"item.id\"><div class=\"p-2 bg-base-200 rounded-lg\"><div class=\"flex items-center justify-between text-sm\"><div class=\"truncate\"><span class=\"font-medium truncate\" x-text=\"item.file.name\"></span> <span class=\"opacity-60 ml-2\" x-text=\"$store.uploader.formatSize(item.file.size)\"></span></div></div><progress class=\"progress progress-primary w-full mt-1\" :value=\"item.progress\" max=\"100\"></progress></div></template><!-- Feedback for skipped files --><p class=\"text-xs text-error\" x-show=\"$store.uploader.rejectedCount > 0\" x-text=\"`${$store.uploader.rejectedCount} file(s) skipped (invalid type)`\"></p></div></div><!-- Alpine component (define once on the page; safe inline here) --><script>\n\n  </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

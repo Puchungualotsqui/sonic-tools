@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"mime/multipart"
 	"net/http"
 )
@@ -39,7 +40,7 @@ func ReadConfig(r *http.Request) (map[string]any, error) {
 		return nil, fmt.Errorf("failed to parse settings JSON: %w", err)
 	}
 
-	fmt.Printf("Parsed settings")
+	fmt.Printf("Parsed settings \n")
 	return settings, nil
 }
 
@@ -54,4 +55,27 @@ func OrderFiles(files []*multipart.FileHeader, order []string) []*multipart.File
 		}
 	}
 	return ordered
+}
+
+func ReadUploadedFiles(files []*multipart.FileHeader) ([][]byte, []string, error) {
+	var fileData [][]byte
+	var fileNames []string
+
+	for _, fh := range files {
+		f, err := fh.Open()
+		if err != nil {
+			return nil, nil, err
+		}
+		defer f.Close()
+
+		data, err := io.ReadAll(f)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		fileData = append(fileData, data)
+		fileNames = append(fileNames, fh.Filename)
+	}
+
+	return fileData, fileNames, nil
 }

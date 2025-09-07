@@ -14,3 +14,12 @@ func GetArrayString(input any) []string {
 	}
 	return result
 }
+
+func TryGetValue[T any](m map[string]any, key string, def T) T {
+	if v, ok := m[key]; ok {
+		if cast, ok := v.(T); ok {
+			return cast
+		}
+	}
+	return def
+}

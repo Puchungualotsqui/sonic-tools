@@ -19,101 +19,725 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AudioProcessor_Trim_FullMethodName = "/audio.AudioProcessor/Trim"
+	CompressAudio_CompressPercentage_FullMethodName = "/audio.CompressAudio/CompressPercentage"
+	CompressAudio_CompressSize_FullMethodName       = "/audio.CompressAudio/CompressSize"
+	CompressAudio_CompressQuality_FullMethodName    = "/audio.CompressAudio/CompressQuality"
 )
 
-// AudioProcessorClient is the client API for AudioProcessor service.
+// CompressAudioClient is the client API for CompressAudio service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type AudioProcessorClient interface {
-	Trim(ctx context.Context, in *TrimRequest, opts ...grpc.CallOption) (*AudioResponse, error)
+type CompressAudioClient interface {
+	CompressPercentage(ctx context.Context, in *CompressPercentageRequest, opts ...grpc.CallOption) (*AudioResponse, error)
+	CompressSize(ctx context.Context, in *CompressSizeRequest, opts ...grpc.CallOption) (*AudioResponse, error)
+	CompressQuality(ctx context.Context, in *CompressQualityRequest, opts ...grpc.CallOption) (*AudioResponse, error)
 }
 
-type audioProcessorClient struct {
+type compressAudioClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAudioProcessorClient(cc grpc.ClientConnInterface) AudioProcessorClient {
-	return &audioProcessorClient{cc}
+func NewCompressAudioClient(cc grpc.ClientConnInterface) CompressAudioClient {
+	return &compressAudioClient{cc}
 }
 
-func (c *audioProcessorClient) Trim(ctx context.Context, in *TrimRequest, opts ...grpc.CallOption) (*AudioResponse, error) {
+func (c *compressAudioClient) CompressPercentage(ctx context.Context, in *CompressPercentageRequest, opts ...grpc.CallOption) (*AudioResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AudioResponse)
-	err := c.cc.Invoke(ctx, AudioProcessor_Trim_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CompressAudio_CompressPercentage_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AudioProcessorServer is the server API for AudioProcessor service.
-// All implementations must embed UnimplementedAudioProcessorServer
-// for forward compatibility.
-type AudioProcessorServer interface {
-	Trim(context.Context, *TrimRequest) (*AudioResponse, error)
-	mustEmbedUnimplementedAudioProcessorServer()
+func (c *compressAudioClient) CompressSize(ctx context.Context, in *CompressSizeRequest, opts ...grpc.CallOption) (*AudioResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AudioResponse)
+	err := c.cc.Invoke(ctx, CompressAudio_CompressSize_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-// UnimplementedAudioProcessorServer must be embedded to have
+func (c *compressAudioClient) CompressQuality(ctx context.Context, in *CompressQualityRequest, opts ...grpc.CallOption) (*AudioResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AudioResponse)
+	err := c.cc.Invoke(ctx, CompressAudio_CompressQuality_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// CompressAudioServer is the server API for CompressAudio service.
+// All implementations must embed UnimplementedCompressAudioServer
+// for forward compatibility.
+type CompressAudioServer interface {
+	CompressPercentage(context.Context, *CompressPercentageRequest) (*AudioResponse, error)
+	CompressSize(context.Context, *CompressSizeRequest) (*AudioResponse, error)
+	CompressQuality(context.Context, *CompressQualityRequest) (*AudioResponse, error)
+	mustEmbedUnimplementedCompressAudioServer()
+}
+
+// UnimplementedCompressAudioServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedAudioProcessorServer struct{}
+type UnimplementedCompressAudioServer struct{}
 
-func (UnimplementedAudioProcessorServer) Trim(context.Context, *TrimRequest) (*AudioResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Trim not implemented")
+func (UnimplementedCompressAudioServer) CompressPercentage(context.Context, *CompressPercentageRequest) (*AudioResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CompressPercentage not implemented")
 }
-func (UnimplementedAudioProcessorServer) mustEmbedUnimplementedAudioProcessorServer() {}
-func (UnimplementedAudioProcessorServer) testEmbeddedByValue()                        {}
+func (UnimplementedCompressAudioServer) CompressSize(context.Context, *CompressSizeRequest) (*AudioResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CompressSize not implemented")
+}
+func (UnimplementedCompressAudioServer) CompressQuality(context.Context, *CompressQualityRequest) (*AudioResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CompressQuality not implemented")
+}
+func (UnimplementedCompressAudioServer) mustEmbedUnimplementedCompressAudioServer() {}
+func (UnimplementedCompressAudioServer) testEmbeddedByValue()                       {}
 
-// UnsafeAudioProcessorServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AudioProcessorServer will
+// UnsafeCompressAudioServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CompressAudioServer will
 // result in compilation errors.
-type UnsafeAudioProcessorServer interface {
-	mustEmbedUnimplementedAudioProcessorServer()
+type UnsafeCompressAudioServer interface {
+	mustEmbedUnimplementedCompressAudioServer()
 }
 
-func RegisterAudioProcessorServer(s grpc.ServiceRegistrar, srv AudioProcessorServer) {
-	// If the following call pancis, it indicates UnimplementedAudioProcessorServer was
+func RegisterCompressAudioServer(s grpc.ServiceRegistrar, srv CompressAudioServer) {
+	// If the following call pancis, it indicates UnimplementedCompressAudioServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&AudioProcessor_ServiceDesc, srv)
+	s.RegisterService(&CompressAudio_ServiceDesc, srv)
 }
 
-func _AudioProcessor_Trim_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CompressAudio_CompressPercentage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompressPercentageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CompressAudioServer).CompressPercentage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CompressAudio_CompressPercentage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CompressAudioServer).CompressPercentage(ctx, req.(*CompressPercentageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CompressAudio_CompressSize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompressSizeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CompressAudioServer).CompressSize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CompressAudio_CompressSize_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CompressAudioServer).CompressSize(ctx, req.(*CompressSizeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CompressAudio_CompressQuality_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompressQualityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CompressAudioServer).CompressQuality(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CompressAudio_CompressQuality_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CompressAudioServer).CompressQuality(ctx, req.(*CompressQualityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// CompressAudio_ServiceDesc is the grpc.ServiceDesc for CompressAudio service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var CompressAudio_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "audio.CompressAudio",
+	HandlerType: (*CompressAudioServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CompressPercentage",
+			Handler:    _CompressAudio_CompressPercentage_Handler,
+		},
+		{
+			MethodName: "CompressSize",
+			Handler:    _CompressAudio_CompressSize_Handler,
+		},
+		{
+			MethodName: "CompressQuality",
+			Handler:    _CompressAudio_CompressQuality_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "audio.proto",
+}
+
+const (
+	ConvertAudio_Convert_FullMethodName = "/audio.ConvertAudio/Convert"
+)
+
+// ConvertAudioClient is the client API for ConvertAudio service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ConvertAudioClient interface {
+	Convert(ctx context.Context, in *ConvertRequest, opts ...grpc.CallOption) (*AudioResponse, error)
+}
+
+type convertAudioClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewConvertAudioClient(cc grpc.ClientConnInterface) ConvertAudioClient {
+	return &convertAudioClient{cc}
+}
+
+func (c *convertAudioClient) Convert(ctx context.Context, in *ConvertRequest, opts ...grpc.CallOption) (*AudioResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AudioResponse)
+	err := c.cc.Invoke(ctx, ConvertAudio_Convert_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ConvertAudioServer is the server API for ConvertAudio service.
+// All implementations must embed UnimplementedConvertAudioServer
+// for forward compatibility.
+type ConvertAudioServer interface {
+	Convert(context.Context, *ConvertRequest) (*AudioResponse, error)
+	mustEmbedUnimplementedConvertAudioServer()
+}
+
+// UnimplementedConvertAudioServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedConvertAudioServer struct{}
+
+func (UnimplementedConvertAudioServer) Convert(context.Context, *ConvertRequest) (*AudioResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Convert not implemented")
+}
+func (UnimplementedConvertAudioServer) mustEmbedUnimplementedConvertAudioServer() {}
+func (UnimplementedConvertAudioServer) testEmbeddedByValue()                      {}
+
+// UnsafeConvertAudioServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ConvertAudioServer will
+// result in compilation errors.
+type UnsafeConvertAudioServer interface {
+	mustEmbedUnimplementedConvertAudioServer()
+}
+
+func RegisterConvertAudioServer(s grpc.ServiceRegistrar, srv ConvertAudioServer) {
+	// If the following call pancis, it indicates UnimplementedConvertAudioServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&ConvertAudio_ServiceDesc, srv)
+}
+
+func _ConvertAudio_Convert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConvertRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConvertAudioServer).Convert(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConvertAudio_Convert_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConvertAudioServer).Convert(ctx, req.(*ConvertRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ConvertAudio_ServiceDesc is the grpc.ServiceDesc for ConvertAudio service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ConvertAudio_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "audio.ConvertAudio",
+	HandlerType: (*ConvertAudioServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Convert",
+			Handler:    _ConvertAudio_Convert_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "audio.proto",
+}
+
+const (
+	TrimAudio_Trim_FullMethodName = "/audio.TrimAudio/Trim"
+)
+
+// TrimAudioClient is the client API for TrimAudio service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type TrimAudioClient interface {
+	Trim(ctx context.Context, in *TrimRequest, opts ...grpc.CallOption) (*AudioResponse, error)
+}
+
+type trimAudioClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewTrimAudioClient(cc grpc.ClientConnInterface) TrimAudioClient {
+	return &trimAudioClient{cc}
+}
+
+func (c *trimAudioClient) Trim(ctx context.Context, in *TrimRequest, opts ...grpc.CallOption) (*AudioResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AudioResponse)
+	err := c.cc.Invoke(ctx, TrimAudio_Trim_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// TrimAudioServer is the server API for TrimAudio service.
+// All implementations must embed UnimplementedTrimAudioServer
+// for forward compatibility.
+type TrimAudioServer interface {
+	Trim(context.Context, *TrimRequest) (*AudioResponse, error)
+	mustEmbedUnimplementedTrimAudioServer()
+}
+
+// UnimplementedTrimAudioServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedTrimAudioServer struct{}
+
+func (UnimplementedTrimAudioServer) Trim(context.Context, *TrimRequest) (*AudioResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Trim not implemented")
+}
+func (UnimplementedTrimAudioServer) mustEmbedUnimplementedTrimAudioServer() {}
+func (UnimplementedTrimAudioServer) testEmbeddedByValue()                   {}
+
+// UnsafeTrimAudioServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to TrimAudioServer will
+// result in compilation errors.
+type UnsafeTrimAudioServer interface {
+	mustEmbedUnimplementedTrimAudioServer()
+}
+
+func RegisterTrimAudioServer(s grpc.ServiceRegistrar, srv TrimAudioServer) {
+	// If the following call pancis, it indicates UnimplementedTrimAudioServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&TrimAudio_ServiceDesc, srv)
+}
+
+func _TrimAudio_Trim_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TrimRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AudioProcessorServer).Trim(ctx, in)
+		return srv.(TrimAudioServer).Trim(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AudioProcessor_Trim_FullMethodName,
+		FullMethod: TrimAudio_Trim_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AudioProcessorServer).Trim(ctx, req.(*TrimRequest))
+		return srv.(TrimAudioServer).Trim(ctx, req.(*TrimRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// AudioProcessor_ServiceDesc is the grpc.ServiceDesc for AudioProcessor service.
+// TrimAudio_ServiceDesc is the grpc.ServiceDesc for TrimAudio service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var AudioProcessor_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "audio.AudioProcessor",
-	HandlerType: (*AudioProcessorServer)(nil),
+var TrimAudio_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "audio.TrimAudio",
+	HandlerType: (*TrimAudioServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Trim",
-			Handler:    _AudioProcessor_Trim_Handler,
+			Handler:    _TrimAudio_Trim_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "audio.proto",
+}
+
+const (
+	MergeAudio_Merge_FullMethodName = "/audio.MergeAudio/Merge"
+)
+
+// MergeAudioClient is the client API for MergeAudio service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type MergeAudioClient interface {
+	Merge(ctx context.Context, in *MergeRequest, opts ...grpc.CallOption) (*AudioResponse, error)
+}
+
+type mergeAudioClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewMergeAudioClient(cc grpc.ClientConnInterface) MergeAudioClient {
+	return &mergeAudioClient{cc}
+}
+
+func (c *mergeAudioClient) Merge(ctx context.Context, in *MergeRequest, opts ...grpc.CallOption) (*AudioResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AudioResponse)
+	err := c.cc.Invoke(ctx, MergeAudio_Merge_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// MergeAudioServer is the server API for MergeAudio service.
+// All implementations must embed UnimplementedMergeAudioServer
+// for forward compatibility.
+type MergeAudioServer interface {
+	Merge(context.Context, *MergeRequest) (*AudioResponse, error)
+	mustEmbedUnimplementedMergeAudioServer()
+}
+
+// UnimplementedMergeAudioServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedMergeAudioServer struct{}
+
+func (UnimplementedMergeAudioServer) Merge(context.Context, *MergeRequest) (*AudioResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Merge not implemented")
+}
+func (UnimplementedMergeAudioServer) mustEmbedUnimplementedMergeAudioServer() {}
+func (UnimplementedMergeAudioServer) testEmbeddedByValue()                    {}
+
+// UnsafeMergeAudioServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to MergeAudioServer will
+// result in compilation errors.
+type UnsafeMergeAudioServer interface {
+	mustEmbedUnimplementedMergeAudioServer()
+}
+
+func RegisterMergeAudioServer(s grpc.ServiceRegistrar, srv MergeAudioServer) {
+	// If the following call pancis, it indicates UnimplementedMergeAudioServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&MergeAudio_ServiceDesc, srv)
+}
+
+func _MergeAudio_Merge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MergeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MergeAudioServer).Merge(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MergeAudio_Merge_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MergeAudioServer).Merge(ctx, req.(*MergeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// MergeAudio_ServiceDesc is the grpc.ServiceDesc for MergeAudio service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var MergeAudio_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "audio.MergeAudio",
+	HandlerType: (*MergeAudioServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Merge",
+			Handler:    _MergeAudio_Merge_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "audio.proto",
+}
+
+const (
+	MetadataAudio_Metadata_FullMethodName = "/audio.MetadataAudio/Metadata"
+)
+
+// MetadataAudioClient is the client API for MetadataAudio service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type MetadataAudioClient interface {
+	Metadata(ctx context.Context, in *MetadataRequest, opts ...grpc.CallOption) (*AudioResponse, error)
+}
+
+type metadataAudioClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewMetadataAudioClient(cc grpc.ClientConnInterface) MetadataAudioClient {
+	return &metadataAudioClient{cc}
+}
+
+func (c *metadataAudioClient) Metadata(ctx context.Context, in *MetadataRequest, opts ...grpc.CallOption) (*AudioResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AudioResponse)
+	err := c.cc.Invoke(ctx, MetadataAudio_Metadata_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// MetadataAudioServer is the server API for MetadataAudio service.
+// All implementations must embed UnimplementedMetadataAudioServer
+// for forward compatibility.
+type MetadataAudioServer interface {
+	Metadata(context.Context, *MetadataRequest) (*AudioResponse, error)
+	mustEmbedUnimplementedMetadataAudioServer()
+}
+
+// UnimplementedMetadataAudioServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedMetadataAudioServer struct{}
+
+func (UnimplementedMetadataAudioServer) Metadata(context.Context, *MetadataRequest) (*AudioResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Metadata not implemented")
+}
+func (UnimplementedMetadataAudioServer) mustEmbedUnimplementedMetadataAudioServer() {}
+func (UnimplementedMetadataAudioServer) testEmbeddedByValue()                       {}
+
+// UnsafeMetadataAudioServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to MetadataAudioServer will
+// result in compilation errors.
+type UnsafeMetadataAudioServer interface {
+	mustEmbedUnimplementedMetadataAudioServer()
+}
+
+func RegisterMetadataAudioServer(s grpc.ServiceRegistrar, srv MetadataAudioServer) {
+	// If the following call pancis, it indicates UnimplementedMetadataAudioServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&MetadataAudio_ServiceDesc, srv)
+}
+
+func _MetadataAudio_Metadata_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MetadataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MetadataAudioServer).Metadata(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MetadataAudio_Metadata_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MetadataAudioServer).Metadata(ctx, req.(*MetadataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// MetadataAudio_ServiceDesc is the grpc.ServiceDesc for MetadataAudio service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var MetadataAudio_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "audio.MetadataAudio",
+	HandlerType: (*MetadataAudioServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Metadata",
+			Handler:    _MetadataAudio_Metadata_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "audio.proto",
+}
+
+const (
+	BoostAudio_BoostManual_FullMethodName    = "/audio.BoostAudio/BoostManual"
+	BoostAudio_BoostNormalize_FullMethodName = "/audio.BoostAudio/BoostNormalize"
+)
+
+// BoostAudioClient is the client API for BoostAudio service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type BoostAudioClient interface {
+	BoostManual(ctx context.Context, in *BoostManualRequest, opts ...grpc.CallOption) (*AudioResponse, error)
+	BoostNormalize(ctx context.Context, in *BoostNormalizeRequest, opts ...grpc.CallOption) (*AudioResponse, error)
+}
+
+type boostAudioClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewBoostAudioClient(cc grpc.ClientConnInterface) BoostAudioClient {
+	return &boostAudioClient{cc}
+}
+
+func (c *boostAudioClient) BoostManual(ctx context.Context, in *BoostManualRequest, opts ...grpc.CallOption) (*AudioResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AudioResponse)
+	err := c.cc.Invoke(ctx, BoostAudio_BoostManual_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *boostAudioClient) BoostNormalize(ctx context.Context, in *BoostNormalizeRequest, opts ...grpc.CallOption) (*AudioResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AudioResponse)
+	err := c.cc.Invoke(ctx, BoostAudio_BoostNormalize_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// BoostAudioServer is the server API for BoostAudio service.
+// All implementations must embed UnimplementedBoostAudioServer
+// for forward compatibility.
+type BoostAudioServer interface {
+	BoostManual(context.Context, *BoostManualRequest) (*AudioResponse, error)
+	BoostNormalize(context.Context, *BoostNormalizeRequest) (*AudioResponse, error)
+	mustEmbedUnimplementedBoostAudioServer()
+}
+
+// UnimplementedBoostAudioServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedBoostAudioServer struct{}
+
+func (UnimplementedBoostAudioServer) BoostManual(context.Context, *BoostManualRequest) (*AudioResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BoostManual not implemented")
+}
+func (UnimplementedBoostAudioServer) BoostNormalize(context.Context, *BoostNormalizeRequest) (*AudioResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BoostNormalize not implemented")
+}
+func (UnimplementedBoostAudioServer) mustEmbedUnimplementedBoostAudioServer() {}
+func (UnimplementedBoostAudioServer) testEmbeddedByValue()                    {}
+
+// UnsafeBoostAudioServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BoostAudioServer will
+// result in compilation errors.
+type UnsafeBoostAudioServer interface {
+	mustEmbedUnimplementedBoostAudioServer()
+}
+
+func RegisterBoostAudioServer(s grpc.ServiceRegistrar, srv BoostAudioServer) {
+	// If the following call pancis, it indicates UnimplementedBoostAudioServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&BoostAudio_ServiceDesc, srv)
+}
+
+func _BoostAudio_BoostManual_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BoostManualRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BoostAudioServer).BoostManual(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BoostAudio_BoostManual_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BoostAudioServer).BoostManual(ctx, req.(*BoostManualRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BoostAudio_BoostNormalize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BoostNormalizeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BoostAudioServer).BoostNormalize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BoostAudio_BoostNormalize_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BoostAudioServer).BoostNormalize(ctx, req.(*BoostNormalizeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// BoostAudio_ServiceDesc is the grpc.ServiceDesc for BoostAudio service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var BoostAudio_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "audio.BoostAudio",
+	HandlerType: (*BoostAudioServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "BoostManual",
+			Handler:    _BoostAudio_BoostManual_Handler,
+		},
+		{
+			MethodName: "BoostNormalize",
+			Handler:    _BoostAudio_BoostNormalize_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

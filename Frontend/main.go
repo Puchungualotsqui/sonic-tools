@@ -19,17 +19,17 @@ func main() {
 		case "/":
 			bodyContent = body.Home()
 		case "/compress":
-			bodyContent = body.Tool("🎚️ Compress Your Audio", "Compress", settings.Compress())
+			bodyContent = body.Tool("🎚️ Compress Your Audio", "Compress", settings.Compress(), ".mp3,.ogg,.aac", true)
 		case "/convert":
-			bodyContent = body.Tool("🔄 Convert Your Audio", "Convert", settings.Convert())
+			bodyContent = body.Tool("🔄 Convert Your Audio", "Convert", settings.Convert(), ".mp3,.wav,.flac,.ogg,.aac,.m4a", true)
 		case "/trim":
-			bodyContent = body.Tool("✂️ Trim Your Audio", "Trim", settings.Trim())
+			bodyContent = body.Tool("✂️ Trim Your Audio", "Trim", settings.Trim(), ".mp3,.wav,.flac,.ogg,.aac,.m4a", false)
 		case "/merge":
-			bodyContent = body.Tool("➕ Merge Your Audio", "Merge", settings.Merge())
+			bodyContent = body.Tool("➕ Merge Your Audio", "Merge", settings.Merge(), ".mp3,.wav,.flac,.ogg,.aac,.m4a", true)
 		case "/metadata":
-			bodyContent = body.Tool("🏷️ Edit Metadata", "Save metadata", settings.Metadata())
+			bodyContent = body.Tool("🏷️ Edit Metadata", "Save metadata", settings.Metadata(), ".mp3,.wav,.flac,.ogg,.aac,.m4a", false)
 		case "/boost":
-			bodyContent = body.Tool("🔊 Volume Booster", "Apply", settings.Boost())
+			bodyContent = body.Tool("🔊 Volume Booster", "Apply", settings.Boost(), ".mp3,.wav,.flac,.ogg,.aac,.m4a", true)
 		default:
 			http.NotFound(w, r)
 			return

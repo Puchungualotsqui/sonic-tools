@@ -1,16 +1,18 @@
 package handlers
 
 import (
+	audio "backend/proto/backend/proto"
 	"backend/services"
 	"backend/utils"
-	"io"
+	"fmt"
 	"log"
 	"net/http"
 )
 
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	// Check uploaded files constrains
-	err := services.CheckRequestConstrictions(r)
+	var err error
+	err = services.CheckRequestConstrictions(r)
 	if err != nil {
 		log.Println("Upload error:", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -41,22 +43,46 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	files := services.OrderFiles(r.MultipartForm.File["files"], fileOrder)
 
-	// For testing, just return the first file as a download
-	fileHeader := files[0]
-	file, err := fileHeader.Open()
+	fileData, fileNames, err := services.ReadUploadedFiles(files)
 	if err != nil {
-		http.Error(w, "Failed to open file", http.StatusInternalServerError)
+		http.Error(w, "Failed to read uploaded files: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer file.Close()
+	tool := settings["tool"]
+
+	var resp *audio.AudioResponse
+
+	switch tool {
+	case "compress":
+		method := settings["method"]
+		switch method {
+		case "mb":
+			targetSize := utils.TryGetValue(settings, "mb", "1")
+			resp, err = services.CompressQuality(fileData, fileNames, targetSize)
+			if err != nil {
+				http.Error(w, "Compression failed: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+		case "percentage":
+			targetPercentage := utils.TryGetValue(settings, "percentage", int32(1))
+			resp, err = services.CompressPercentage(fileData, fileNames, targetPercentage)
+			if err != nil {
+				http.Error(w, "Compression failed: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+		case "quality":
+			quality := utils.TryGetValue(settings, "quality", "medium")
+			resp, err = services.CompressQuality(fileData, fileNames, quality)
+			fmt.Println("compression finished")
+			if err != nil {
+				http.Error(w, "Compression failed: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+	}
 
 	// Set headers so browser downloads the file
-	w.Header().Set("Content-Disposition", "attachment; filename="+fileHeader.Filename)
+	w.Header().Set("Content-Disposition", "attachment; filename="+resp.Filename)
 	w.Header().Set("Content-Type", "application/octet-stream")
-
-	_, err = io.Copy(w, file)
-	if err != nil {
-		http.Error(w, "Failed to send file", http.StatusInternalServerError)
-		return
-	}
+	w.Write(resp.FileData)
 }

@@ -4,17 +4,101 @@ package audio;
 
 option go_package = "backend/proto;audio";
 
-service AudioProcessor {
+message AudioResponse {
+    bytes file_data = 1;
+    string format = 2;
+    string filename = 3;
+}
+
+
+service CompressAudio {
+    rpc CompressPercentage(CompressPercentageRequest) returns (AudioResponse);
+    rpc CompressSize(CompressSizeRequest) returns (AudioResponse);
+    rpc CompressQuality(CompressQualityRequest) returns (AudioResponse);
+}
+
+message CompressPercentageRequest {
+    repeated bytes file_data = 1;
+    repeated string filenames = 2;
+    int32 percentage = 3;
+}
+
+message CompressSizeRequest {
+    repeated bytes file_data = 1;
+    repeated string filenames = 2;
+    int32 size = 3;
+}
+
+message CompressQualityRequest {
+    repeated bytes file_data = 1;
+    repeated string filenames = 2;
+    string quality = 3; // low, medium, high
+}
+
+
+service ConvertAudio {
+    rpc Convert(ConvertRequest) returns (AudioResponse);
+}
+
+message ConvertRequest {
+    repeated bytes file_data = 1;
+    repeated string filenames = 2;
+    string output_format = 3;
+    int32 bitrate = 4;
+}
+
+
+service TrimAudio {
     rpc Trim(TrimRequest) returns (AudioResponse);
 }
 
 message TrimRequest {
     bytes file_data = 1;
-    int32 start_ms = 2;
-    int32 end_ms = 3;
+    string filenames = 2;
+    optional int32 start_ms = 3;
+    optional int32 end_ms = 4;
+    string action = 5;
 }
 
-message AudioResponse {
+
+service MergeAudio {
+    rpc Merge(MergeRequest) returns (AudioResponse);
+}
+
+message MergeRequest {
+    repeated bytes file_data = 1;
+    repeated string filenames = 2;
+    string output_format = 3;
+}
+
+
+service MetadataAudio {
+    rpc Metadata(MetadataRequest) returns (AudioResponse);
+}
+
+message MetadataRequest {
     bytes file_data = 1;
-    string format = 2;
+    string filenames = 2;
+    optional string title = 3;
+    optional string artist = 4;
+    optional string album = 5;
+    optional int32 year = 6;
+    optional bytes cover_art = 7;
+}
+
+
+service BoostAudio {
+    rpc BoostManual(BoostManualRequest) returns (AudioResponse);
+    rpc BoostNormalize(BoostNormalizeRequest) returns (AudioResponse);
+}
+
+message BoostManualRequest {
+    repeated bytes file_data = 1;
+    repeated string filenames = 2;
+    int32 gain = 3;
+}
+
+message BoostNormalizeRequest {
+    repeated bytes file_data = 1;
+    repeated string filenames = 2;
 }
