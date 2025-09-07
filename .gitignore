@@ -5,3 +5,4 @@ Frontend/.gitkey
 Frontend/.air.toml
 Frontend/tmp
 .buildCommands
+Services/rust-audio/target

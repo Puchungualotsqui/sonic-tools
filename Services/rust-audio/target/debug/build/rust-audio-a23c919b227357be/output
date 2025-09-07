@@ -1,2 +1,0 @@
-cargo:rerun-if-changed=/mnt/storage/Documents/Projects/WebDevelopment/SonicTools/Services/../proto/audio.proto
-cargo:rerun-if-changed=/mnt/storage/Documents/Projects/WebDevelopment/SonicTools/Services/../proto
