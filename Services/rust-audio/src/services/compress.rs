@@ -15,31 +15,37 @@ impl CompressAudio for CompressService {
         &self,
         request: Request<CompressPercentageRequest>,
     ) -> Result<Response<AudioResponse>, Status> {
+        println!("Starting compression by percentage");
         let req = request.into_inner();
         let mut outputs = Vec::new();
 
         for (i, data) in req.file_data.into_iter().enumerate() {
             let filename = req.filenames.get(i).cloned().unwrap_or("output".into());
+            println!("filename gotten");
             let ext = filename.split('.').last().unwrap_or("mp3");
+            println!("extension goten");
 
-            let original_bitrate = match probe_bitrate(&data) {
+            let original_bitrate = match probe_bitrate(&data, ext) {
                 Ok(b) => b,
                 Err(e) => return Err(Status::internal(e)),
             };
 
+            println!("original bitrate gotten");
             let mut target_bitrate =
                 ((original_bitrate as f32) * (req.percentage as f32 / 100.0)) as i32 / 1000;
+            println!("first target bitrate set");
 
             if target_bitrate < 32 {
                 target_bitrate = 32
             }
+            println!("final target bitrate set");
 
             let out_name = format!(
                 "{}.{}",
                 filename.trim_end_matches(&format!(".{}", ext)),
                 ext
             );
-
+            println!("compressin file");
             match compress_file(data, ext, Some(target_bitrate)) {
                 Ok(bytes) => outputs.push((out_name, bytes)),
                 Err(e) => return Err(Status::internal(e)),
@@ -59,7 +65,7 @@ impl CompressAudio for CompressService {
                 Ok(zip_bytes) => Ok(Response::new(AudioResponse {
                     file_data: zip_bytes,
                     format: "zip".to_string(),
-                    filename: "sonic-tools".to_string(),
+                    filename: "sonic-tools.zip".to_string(),
                 })),
                 Err(e) => Err(Status::internal(e)),
             }
@@ -70,10 +76,12 @@ impl CompressAudio for CompressService {
         &self,
         request: Request<CompressSizeRequest>,
     ) -> Result<Response<AudioResponse>, Status> {
+        println!("compress started");
         let req = request.into_inner();
         let mut outputs = Vec::new();
 
         for (i, data) in req.file_data.into_iter().enumerate() {
+            println!("loop starting");
             let filename = req.filenames.get(i).cloned().unwrap_or("output".into());
             let ext = filename.split('.').last().unwrap_or("mp3");
 
@@ -96,12 +104,17 @@ impl CompressAudio for CompressService {
                 ext
             );
 
+            println!("Target bitrate calc: {} kbps", target_bitrate);
+
             match compress_file(data, ext, Some(target_bitrate)) {
                 Ok(bytes) => outputs.push((out_name, bytes)),
                 Err(e) => return Err(Status::internal(e)),
             }
+
+            println!("one looped finished");
         }
 
+        println!("loop finished");
         if outputs.len() == 1 {
             let (filename, bytes) = outputs.into_iter().next().unwrap();
             let ext = filename.split('.').last().unwrap_or("mp3");
@@ -115,7 +128,7 @@ impl CompressAudio for CompressService {
                 Ok(zip_bytes) => Ok(Response::new(AudioResponse {
                     file_data: zip_bytes,
                     format: "zip".to_string(),
-                    filename: "sonic-tools".to_string(),
+                    filename: "sonic-tools.zip".to_string(),
                 })),
                 Err(e) => Err(Status::internal(e)),
             }
@@ -129,6 +142,7 @@ impl CompressAudio for CompressService {
         let req = request.into_inner();
         let mut outputs = Vec::new();
 
+        println!("compress_quality loop starting");
         for (i, data) in req.file_data.into_iter().enumerate() {
             let filename = req.filenames.get(i).cloned().unwrap_or("output".into());
             let ext = filename.split('.').last().unwrap_or("mp3");
@@ -143,7 +157,9 @@ impl CompressAudio for CompressService {
                 Ok(bytes) => outputs.push((filename, bytes)),
                 Err(e) => return Err(Status::internal(e)),
             }
+            println!("one looped finished");
         }
+        print!("loop finished");
 
         if outputs.len() == 1 {
             let (filename, bytes) = outputs.into_iter().next().unwrap();
@@ -154,11 +170,12 @@ impl CompressAudio for CompressService {
                 filename: filename,
             }))
         } else {
+            println!("starting to make zip");
             match make_zip(outputs) {
                 Ok(zip_bytes) => Ok(Response::new(AudioResponse {
                     file_data: zip_bytes,
                     format: "zip".to_string(),
-                    filename: "sonic-tools".to_string(),
+                    filename: "sonic-tools.zip".to_string(),
                 })),
                 Err(e) => Err(Status::internal(e)),
             }

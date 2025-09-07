@@ -10,6 +10,7 @@ tokio = { version = "1", features = ["full"] }
 hound = "3.5"
 symphonia = { version = "0.5", features = ["mp3", "wav", "flac", "ogg", "aac"] }
 zip = "5.0.0"
+tempfile = "3.21.0"
 
 [build-dependencies]
 tonic-build = "0.11"

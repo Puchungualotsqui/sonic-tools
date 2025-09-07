@@ -34,7 +34,7 @@ func Tool(title, buttonText string, settings templ.Component, accept string, mul
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"pt-8 pb-12 px-6 max-w-3xl mx-auto\"><h2 class=\"text-3xl font-bold text-center mb-8\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"pt-8 pb-12 px-6 max-w-3xl mx-auto\"><h1 class=\"text-3xl font-bold text-center mb-8\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -47,7 +47,7 @@ func Tool(title, buttonText string, settings templ.Component, accept string, mul
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h2><form action=\"/upload\" method=\"post\" enctype=\"multipart/form-data\" id=\"toolForm\"><!-- Upload area -->")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1><form action=\"/upload\" method=\"post\" enctype=\"multipart/form-data\" id=\"toolForm\"><!-- Upload area -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

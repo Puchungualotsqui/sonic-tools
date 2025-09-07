@@ -97,49 +97,49 @@ templ Layout(content templ.Component) {
           settingsJSON = JSON.stringify(settingsObj);
         }
 
-        await Promise.all(this.files.map(item =>
-          new Promise((resolve, reject) => {
-            const formData = new FormData();
-            formData.append("files", item.file);
-            formData.append("settings", settingsJSON);
+        // Build a single FormData with ALL files
+        const formData = new FormData();
+        this.files.forEach(item => {
+          formData.append("files", item.file); // multiple "files" entries
+        });
+        formData.append("settings", settingsJSON);
 
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "/api/upload", true);
-            xhr.responseType = "blob";
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/upload", true);
+        xhr.responseType = "blob";
 
-            xhr.upload.onprogress = (e) => {
-              if (e.lengthComputable) {
-                item.progress = (e.loaded / e.total) * 100;
-              }
-            };
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const progress = (e.loaded / e.total) * 100;
+            // update progress for all items
+            this.files.forEach(item => item.progress = progress);
+          }
+        };
 
-            xhr.onload = () => {
-              if (xhr.status === 200) {
-                const blob = xhr.response;
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            const blob = xhr.response;
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
 
-                const disposition = xhr.getResponseHeader("Content-Disposition");
-                let filename = item.file.name;
-                if (disposition && disposition.includes("filename=")) {
-                  filename = disposition.split("filename=")[1].replace(/"/g, "");
-                }
-                a.download = filename;
-                a.click();
-                URL.revokeObjectURL(url);
+            const disposition = xhr.getResponseHeader("Content-Disposition");
+            let filename = "sonic-tools.zip"; // default
+            if (disposition && disposition.includes("filename=")) {
+              filename = disposition.split("filename=")[1].replace(/"/g, "");
+            }
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
 
-                item.progress = 100;
-                resolve();
-              } else {
-                reject(new Error("Upload failed for " + item.file.name));
-              }
-            };
+            this.files.forEach(item => item.progress = 100);
+          } else {
+            console.error("Upload failed", xhr.statusText);
+          }
+        };
 
-            xhr.onerror = () => reject(new Error("Network error on " + item.file.name));
-            xhr.send(formData);
-          })
-        ));
+        xhr.onerror = () => console.error("Network error");
+        xhr.send(formData);
       }
     });
   });
@@ -152,7 +152,6 @@ templ Layout(content templ.Component) {
 			<div id="body-container">
 				@content
 			</div>
-
 
 			<div id="footer-container" >
 				@footer.Footer()

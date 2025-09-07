@@ -1,128 +1,119 @@
-use std::io::Write;
-use std::process::{Command, Stdio};
+use std::fs;
+use std::process::Command;
+use tempfile::NamedTempFile;
 
 pub fn compress_file(
     input_bytes: Vec<u8>,
     output_format: &str,
     bitrate: Option<i32>,
 ) -> Result<Vec<u8>, String> {
-    println!(
-        "Running ffmpeg for format={}, bitrate={:?}",
-        output_format, bitrate
-    );
-    let mut child = Command::new("ffmpeg")
+    // 1) Create temp input file
+    let tmp_in = NamedTempFile::new().map_err(|e| format!("tmpfile: {}", e))?;
+    fs::write(tmp_in.path(), &input_bytes).map_err(|e| format!("write tmp in: {}", e))?;
+    let in_path = tmp_in.into_temp_path();
+
+    // 2) Create temp output file
+    let tmp_out = NamedTempFile::new().map_err(|e| format!("tmpfile: {}", e))?;
+    let out_path = tmp_out.into_temp_path();
+
+    // 3) Run ffmpeg: input → output
+    let bitrate_arg = format!("{}k", bitrate.unwrap_or(128));
+    let status = Command::new("ffmpeg")
         .args([
+            "-y", // overwrite output
             "-i",
-            "pipe:0",
+            in_path.to_str().ok_or("bad in_path")?,
             "-b:a",
-            &format!("{}k", bitrate.unwrap_or(128)),
+            &bitrate_arg,
             "-f",
             output_format,
-            "pipe:1",
+            out_path.to_str().ok_or("bad out_path")?,
         ])
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .spawn()
-        .map_err(|e| format!("Failed to spawn ffmpeg: {}", e))?;
-
-    if let Some(mut stdin) = child.stdin.take() {
-        stdin
-            .write_all(&input_bytes)
-            .map_err(|e| format!("Failed to write to ffmpeg stdin: {}", e))?;
-    }
-
-    let output = child
-        .wait_with_output()
+        .status()
         .map_err(|e| format!("Failed to run ffmpeg: {}", e))?;
 
-    if !output.status.success() {
-        let stderr_msg = String::from_utf8_lossy(&output.stderr);
-        eprintln!("ffmpeg failed: {}", stderr_msg); // <-- log to console
-        return Err(format!("ffmpeg failed: {}", stderr_msg));
+    if !status.success() {
+        return Err("ffmpeg failed".into());
     }
 
-    Ok(output.stdout)
+    // 4) Read compressed file
+    let bytes = fs::read(&out_path).map_err(|e| format!("read tmp out: {}", e))?;
+
+    // 5) Temp files auto-delete when paths drop
+    Ok(bytes)
 }
 
-pub fn probe_bitrate(input_bytes: &[u8]) -> Result<i32, String> {
-    use std::io::Write;
-    use std::process::Stdio;
+pub fn probe_bitrate(input_bytes: &[u8], _ext: &str) -> Result<i32, String> {
+    // 1) Create temp file and write bytes
+    let tmp = NamedTempFile::new().map_err(|e| format!("tmpfile: {}", e))?;
+    std::fs::write(tmp.path(), input_bytes).map_err(|e| format!("write tmp: {}", e))?;
 
-    let mut child = Command::new("ffprobe")
-        .args(&[
-            "-i",
-            "pipe:0",
-            "-show_entries",
-            "format=bit_rate",
+    // 2) Convert to TempPath: closes handle, keeps file on disk, will delete on drop
+    let tmp_path = tmp.into_temp_path();
+
+    // 3) Run ffprobe on the path
+    let output = Command::new("ffprobe")
+        .args([
             "-v",
-            "quiet",
+            "error",
             "-of",
             "csv=p=0",
+            "-show_entries",
+            "format=bit_rate",
+            tmp_path.as_os_str().to_str().ok_or("tmp path utf-8")?,
         ])
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .spawn()
-        .map_err(|e| format!("Failed to spawn ffprobe: {}", e))?;
-
-    if let Some(mut stdin) = child.stdin.take() {
-        stdin
-            .write_all(input_bytes)
-            .map_err(|e| format!("Failed to write to ffprobe stdin: {}", e))?;
-    }
-
-    let output = child
-        .wait_with_output()
-        .map_err(|e| format!("Failed to run ffprobe: {}", e))?;
+        .output()
+        .map_err(|e| format!("ffprobe exec: {}", e))?;
 
     if !output.status.success() {
-        return Err("ffprobe failed".into());
+        let err = String::from_utf8_lossy(&output.stderr);
+        // Temp file auto-deletes here on drop
+        return Err(format!("ffprobe failed: {}", err));
     }
 
     let stdout = String::from_utf8_lossy(&output.stdout);
-    stdout
+    // Some files return "N/A"; handle that if needed
+    let bps: i32 = stdout
         .trim()
-        .parse::<i32>()
-        .map_err(|_| "Could not parse bitrate".into())
+        .parse()
+        .map_err(|_| format!("Could not parse bitrate from '{}'", stdout.trim()))?;
+
+    // 4) Explicit delete now (optional). If you omit this, it deletes on drop anyway.
+    tmp_path.close().map_err(|e| format!("delete tmp: {}", e))?;
+
+    Ok(bps)
 }
 
 pub fn probe_duration(input_bytes: &[u8]) -> Result<f32, String> {
-    use std::io::Write;
-    use std::process::{Command, Stdio};
+    let tmp = NamedTempFile::new().map_err(|e| format!("tmpfile: {}", e))?;
+    std::fs::write(tmp.path(), input_bytes).map_err(|e| format!("write tmp: {}", e))?;
+    let tmp_path = tmp.into_temp_path();
 
-    let mut child = Command::new("ffprobe")
-        .args(&[
-            "-i",
-            "pipe:0",
-            "-show_entries",
-            "format=duration",
+    let output = Command::new("ffprobe")
+        .args([
             "-v",
-            "quiet",
+            "error",
             "-of",
             "csv=p=0",
+            "-show_entries",
+            "format=duration",
+            tmp_path.as_os_str().to_str().ok_or("tmp path utf-8")?,
         ])
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .spawn()
-        .map_err(|e| format!("Failed to spawn ffprobe: {}", e))?;
-
-    if let Some(mut stdin) = child.stdin.take() {
-        stdin
-            .write_all(input_bytes)
-            .map_err(|e| format!("Failed to write to ffprobe stdin: {}", e))?;
-    }
-
-    let output = child
-        .wait_with_output()
-        .map_err(|e| format!("Failed to run ffprobe: {}", e))?;
+        .output()
+        .map_err(|e| format!("ffprobe exec: {}", e))?;
 
     if !output.status.success() {
-        return Err("ffprobe failed".into());
+        let err = String::from_utf8_lossy(&output.stderr);
+        return Err(format!("ffprobe failed: {}", err));
     }
 
     let stdout = String::from_utf8_lossy(&output.stdout);
-    stdout
+    let secs: f32 = stdout
         .trim()
-        .parse::<f32>()
-        .map_err(|_| "Could not parse duration".into())
+        .parse()
+        .map_err(|_| format!("Could not parse duration from '{}'", stdout.trim()))?;
+
+    tmp_path.close().map_err(|e| format!("delete tmp: {}", e))?;
+
+    Ok(secs)
 }

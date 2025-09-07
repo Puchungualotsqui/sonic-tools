@@ -4,7 +4,6 @@ import (
 	audio "backend/proto/backend/proto"
 	"backend/services"
 	"backend/utils"
-	"fmt"
 	"log"
 	"net/http"
 )
@@ -57,8 +56,8 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		method := settings["method"]
 		switch method {
 		case "mb":
-			targetSize := utils.TryGetValue(settings, "mb", "1")
-			resp, err = services.CompressQuality(fileData, fileNames, targetSize)
+			targetSize := utils.TryGetValue(settings, "mb", int32(1))
+			resp, err = services.CompressSize(fileData, fileNames, targetSize)
 			if err != nil {
 				http.Error(w, "Compression failed: "+err.Error(), http.StatusInternalServerError)
 				return
@@ -73,12 +72,16 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		case "quality":
 			quality := utils.TryGetValue(settings, "quality", "medium")
 			resp, err = services.CompressQuality(fileData, fileNames, quality)
-			fmt.Println("compression finished")
 			if err != nil {
 				http.Error(w, "Compression failed: "+err.Error(), http.StatusInternalServerError)
 				return
 			}
 		}
+
+	case "convert":
+		format := utils.TryGetValue(settings, "format", "mp3")
+		bitrate := utils.TryGetValue(settings, "bitrate", int32(128))
+		resp, err = services.Convert(fileData, fileNames, format, bitrate)
 	}
 
 	// Set headers so browser downloads the file
