@@ -1,7 +1,9 @@
+pub mod boost;
 pub mod compress;
 pub mod conversion;
 pub mod ffmpeg;
 pub mod merge;
+pub mod metadata;
 pub mod temp;
 pub mod trim;
 pub mod zip;

@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -47,21 +46,17 @@ func Metadata(file []byte, filename string, title, artist, album, year string, c
 }
 
 func GetCover(r *http.Request) ([]byte, error) {
-	coverFiles := r.MultipartForm.File["cover"]
-	if len(coverFiles) == 0 {
-		return nil, nil // no cover uploaded
-	}
-
-	f, err := coverFiles[0].Open()
+	file, _, err := r.FormFile("cover")
 	if err != nil {
-		return nil, fmt.Errorf("open cover file: %w", err)
+		// No cover uploaded
+		return nil, nil
 	}
-	defer f.Close()
+	defer file.Close()
 
-	coverBytes, err := io.ReadAll(f)
+	data, err := io.ReadAll(file)
 	if err != nil {
-		return nil, fmt.Errorf("read cover file: %w", err)
+		return nil, err
 	}
 
-	return coverBytes, nil
+	return data, nil
 }

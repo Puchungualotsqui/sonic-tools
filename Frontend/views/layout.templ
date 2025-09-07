@@ -78,7 +78,7 @@ templ Layout(content templ.Component) {
         if (form) {
           const settingsObj = {};
           new FormData(form).forEach((value, key) => {
-            if (key === "files") return;
+            if (key === "files" || key === "cover") return;
 
             if (settingsObj[key]) {
               if (Array.isArray(settingsObj[key])) {
@@ -103,6 +103,11 @@ templ Layout(content templ.Component) {
           formData.append("files", item.file); // multiple "files" entries
         });
         formData.append("settings", settingsJSON);
+
+        const coverInput = form.querySelector('input[name="cover"]');
+        if (coverInput && coverInput.files.length > 0) {
+          formData.append("cover", coverInput.files[0]);
+        }
 
         const xhr = new XMLHttpRequest();
         xhr.open("POST", "/api/upload", true);

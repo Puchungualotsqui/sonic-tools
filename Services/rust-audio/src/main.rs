@@ -1,8 +1,12 @@
+use rust_audio::audio::boost_audio_server::BoostAudioServer;
 use rust_audio::audio::convert_audio_server::ConvertAudioServer;
 use rust_audio::audio::merge_audio_server::MergeAudioServer;
+use rust_audio::audio::metadata_audio_server::MetadataAudioServer;
 use rust_audio::audio::trim_audio_server::TrimAudioServer;
+use rust_audio::services::boost::BoostService;
 use rust_audio::services::convert::ConvertService;
 use rust_audio::services::merge::MergeService;
+use rust_audio::services::metadata::MetadataService;
 use rust_audio::services::trim::TrimService;
 use tonic::transport::Server;
 
@@ -20,6 +24,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .add_service(ConvertAudioServer::new(ConvertService::default()))
         .add_service(TrimAudioServer::new(TrimService::default()))
         .add_service(MergeAudioServer::new(MergeService::default()))
+        .add_service(MetadataAudioServer::new(MetadataService::default()))
+        .add_service(BoostAudioServer::new(BoostService::default()))
         .serve(addr)
         .await?;
 

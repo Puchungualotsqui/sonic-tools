@@ -136,13 +136,32 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		year := utils.TryGetValue(settings, "year", "")
 		cover, err := services.GetCover(r)
 		if err != nil {
-			http.Error(w, "Failed to process cover: "+err.Error(), http.StatusBadRequest)
-			return
+			log.Println("Cover error:", err)
 		}
+		log.Printf("Cover bytes length: %d", len(cover))
 		resp, err = services.Metadata(fileData[0], fileNames[0], title, artist, album, year, cover)
 		if err != nil {
 			http.Error(w, "Metadata change failed: "+err.Error(), http.StatusInternalServerError)
 			return
+		}
+
+	case "boost":
+		mode := utils.TryGetValue(settings, "mode", "boost")
+		switch mode {
+		case "manual":
+			gain := utils.TryGetValue(settings, "gain", int32(0))
+			resp, err = services.BoostManual(fileData, fileNames, gain)
+			if err != nil {
+				http.Error(w, "Boost manual failed: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+		case "normalize":
+			resp, err = services.BoostNormalize(fileData, fileNames)
+			if err != nil {
+				http.Error(w, "Boost normalize failed: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
 		}
 	}
 

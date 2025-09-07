@@ -33,14 +33,14 @@ func ReadConfig(r *http.Request) (map[string]any, error) {
 		return nil, fmt.Errorf("empty settings JSON")
 	}
 
-	fmt.Println("Raw settings JSON:", settingsJSON)
-
 	var settings map[string]any
 	if err := json.Unmarshal([]byte(settingsJSON), &settings); err != nil {
 		return nil, fmt.Errorf("failed to parse settings JSON: %w", err)
 	}
 
 	delete(settings, "cover")
+
+	fmt.Println("Settings JSON:", settings)
 
 	return settings, nil
 }
