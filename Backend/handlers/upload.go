@@ -4,6 +4,7 @@ import (
 	audio "backend/proto/backend/proto"
 	"backend/services"
 	"backend/utils"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -84,6 +85,39 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		resp, err = services.Convert(fileData, fileNames, format, bitrate)
 		if err != nil {
 			http.Error(w, "Conversion failed: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+	case "trim":
+		start := utils.TryGetValue(settings, "start", "00:00")
+		end := utils.TryGetValue(settings, "end", "59:59")
+		mode := utils.TryGetValue(settings, "mode", "keep")
+
+		startSeconds, err := utils.ParseToSeconds(start)
+		if err != nil {
+			fmt.Println("Invalid start time")
+			http.Error(w, "invalid start time: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		fmt.Println("Start seconds: ", startSeconds)
+
+		endSeconds, err := utils.ParseToSeconds(end)
+		if err != nil {
+			fmt.Println("Invalid end time")
+			http.Error(w, "invalid end time: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		fmt.Println("End seconds: ", endSeconds)
+
+		resp, err = services.Trim(
+			fileData[0],
+			fileNames[0],
+			int32(startSeconds),
+			int32(endSeconds),
+			mode,
+		)
+		if err != nil {
+			http.Error(w, "trim failed: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}

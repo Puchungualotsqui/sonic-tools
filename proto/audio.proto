@@ -54,9 +54,9 @@ service TrimAudio {
 
 message TrimRequest {
     bytes file_data = 1;
-    string filenames = 2;
-    optional int32 start_ms = 3;
-    optional int32 end_ms = 4;
+    string filename = 2;
+    optional int32 start_s = 3;
+    optional int32 end_s = 4;
     string action = 5;
 }
 

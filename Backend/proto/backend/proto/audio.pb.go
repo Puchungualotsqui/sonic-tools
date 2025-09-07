@@ -332,9 +332,9 @@ func (x *ConvertRequest) GetBitrate() int32 {
 type TrimRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FileData      []byte                 `protobuf:"bytes,1,opt,name=file_data,json=fileData,proto3" json:"file_data,omitempty"`
-	Filenames     string                 `protobuf:"bytes,2,opt,name=filenames,proto3" json:"filenames,omitempty"`
-	StartMs       *int32                 `protobuf:"varint,3,opt,name=start_ms,json=startMs,proto3,oneof" json:"start_ms,omitempty"`
-	EndMs         *int32                 `protobuf:"varint,4,opt,name=end_ms,json=endMs,proto3,oneof" json:"end_ms,omitempty"`
+	Filename      string                 `protobuf:"bytes,2,opt,name=filename,proto3" json:"filename,omitempty"`
+	StartS        *int32                 `protobuf:"varint,3,opt,name=start_s,json=startS,proto3,oneof" json:"start_s,omitempty"`
+	EndS          *int32                 `protobuf:"varint,4,opt,name=end_s,json=endS,proto3,oneof" json:"end_s,omitempty"`
 	Action        string                 `protobuf:"bytes,5,opt,name=action,proto3" json:"action,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -377,23 +377,23 @@ func (x *TrimRequest) GetFileData() []byte {
 	return nil
 }
 
-func (x *TrimRequest) GetFilenames() string {
+func (x *TrimRequest) GetFilename() string {
 	if x != nil {
-		return x.Filenames
+		return x.Filename
 	}
 	return ""
 }
 
-func (x *TrimRequest) GetStartMs() int32 {
-	if x != nil && x.StartMs != nil {
-		return *x.StartMs
+func (x *TrimRequest) GetStartS() int32 {
+	if x != nil && x.StartS != nil {
+		return *x.StartS
 	}
 	return 0
 }
 
-func (x *TrimRequest) GetEndMs() int32 {
-	if x != nil && x.EndMs != nil {
-		return *x.EndMs
+func (x *TrimRequest) GetEndS() int32 {
+	if x != nil && x.EndS != nil {
+		return *x.EndS
 	}
 	return 0
 }
@@ -696,15 +696,16 @@ const file_audio_proto_rawDesc = "" +
 	"\tfile_data\x18\x01 \x03(\fR\bfileData\x12\x1c\n" +
 	"\tfilenames\x18\x02 \x03(\tR\tfilenames\x12#\n" +
 	"\routput_format\x18\x03 \x01(\tR\foutputFormat\x12\x18\n" +
-	"\abitrate\x18\x04 \x01(\x05R\abitrate\"\xb4\x01\n" +
+	"\abitrate\x18\x04 \x01(\x05R\abitrate\"\xac\x01\n" +
 	"\vTrimRequest\x12\x1b\n" +
-	"\tfile_data\x18\x01 \x01(\fR\bfileData\x12\x1c\n" +
-	"\tfilenames\x18\x02 \x01(\tR\tfilenames\x12\x1e\n" +
-	"\bstart_ms\x18\x03 \x01(\x05H\x00R\astartMs\x88\x01\x01\x12\x1a\n" +
-	"\x06end_ms\x18\x04 \x01(\x05H\x01R\x05endMs\x88\x01\x01\x12\x16\n" +
-	"\x06action\x18\x05 \x01(\tR\x06actionB\v\n" +
-	"\t_start_msB\t\n" +
-	"\a_end_ms\"n\n" +
+	"\tfile_data\x18\x01 \x01(\fR\bfileData\x12\x1a\n" +
+	"\bfilename\x18\x02 \x01(\tR\bfilename\x12\x1c\n" +
+	"\astart_s\x18\x03 \x01(\x05H\x00R\x06startS\x88\x01\x01\x12\x18\n" +
+	"\x05end_s\x18\x04 \x01(\x05H\x01R\x04endS\x88\x01\x01\x12\x16\n" +
+	"\x06action\x18\x05 \x01(\tR\x06actionB\n" +
+	"\n" +
+	"\b_start_sB\b\n" +
+	"\x06_end_s\"n\n" +
 	"\fMergeRequest\x12\x1b\n" +
 	"\tfile_data\x18\x01 \x03(\fR\bfileData\x12\x1c\n" +
 	"\tfilenames\x18\x02 \x03(\tR\tfilenames\x12#\n" +
