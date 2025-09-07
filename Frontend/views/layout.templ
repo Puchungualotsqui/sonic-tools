@@ -62,6 +62,15 @@ templ Layout(content templ.Component) {
         this.rejectedCount += rejects;
       },
 
+      reset() {
+        this.files = []
+        this.rejectedCount = 0
+
+        // clear the actual input element
+        const input = document.querySelector('#fileInput')
+        if (input) input.value = ''
+      },
+
       isAllowed(file) {
         return this.allowedExts.some(ext => file.name.toLowerCase().endsWith(ext));
       },
@@ -138,6 +147,8 @@ templ Layout(content templ.Component) {
             URL.revokeObjectURL(url);
 
             this.files.forEach(item => item.progress = 100);
+
+            this.reset()
           } else {
             console.error("Upload failed", xhr.statusText);
           }
