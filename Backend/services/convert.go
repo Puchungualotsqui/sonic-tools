@@ -32,6 +32,7 @@ func Convert(files [][]byte, filenames []string, outputFormat string, bitrate in
 
 	req := &pb.ConvertRequest{
 		FileData:     files,
+		Filenames:    filenames,
 		OutputFormat: outputFormat,
 		Bitrate:      bitrate,
 	}

@@ -82,6 +82,10 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		format := utils.TryGetValue(settings, "format", "mp3")
 		bitrate := utils.TryGetValue(settings, "bitrate", int32(128))
 		resp, err = services.Convert(fileData, fileNames, format, bitrate)
+		if err != nil {
+			http.Error(w, "Conversion failed: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 
 	// Set headers so browser downloads the file

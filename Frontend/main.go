@@ -21,15 +21,15 @@ func main() {
 		case "/compress":
 			bodyContent = body.Tool("🎚️ Compress Your Audio", "Compress", settings.Compress(), ".mp3,.ogg,.aac", true)
 		case "/convert":
-			bodyContent = body.Tool("🔄 Convert Your Audio", "Convert", settings.Convert(), ".mp3,.wav,.flac,.ogg,.aac,.m4a", true)
+			bodyContent = body.Tool("🔄 Convert Your Audio", "Convert", settings.Convert(), ".mp3,.wav,.flac,.ogg,.opus,.aiff", true)
 		case "/trim":
-			bodyContent = body.Tool("✂️ Trim Your Audio", "Trim", settings.Trim(), ".mp3,.wav,.flac,.ogg,.aac,.m4a", false)
+			bodyContent = body.Tool("✂️ Trim Your Audio", "Trim", settings.Trim(), ".mp3,.wav,.flac,.ogg,.opus,.aiff", false)
 		case "/merge":
-			bodyContent = body.Tool("➕ Merge Your Audio", "Merge", settings.Merge(), ".mp3,.wav,.flac,.ogg,.aac,.m4a", true)
+			bodyContent = body.Tool("➕ Merge Your Audio", "Merge", settings.Merge(), ".mp3,.wav,.flac,.ogg,.opus,.aiff", true)
 		case "/metadata":
-			bodyContent = body.Tool("🏷️ Edit Metadata", "Save metadata", settings.Metadata(), ".mp3,.wav,.flac,.ogg,.aac,.m4a", false)
+			bodyContent = body.Tool("🏷️ Edit Metadata", "Save metadata", settings.Metadata(), ".mp3,.wav,.flac,.ogg,.opus,.aiff", false)
 		case "/boost":
-			bodyContent = body.Tool("🔊 Volume Booster", "Apply", settings.Boost(), ".mp3,.wav,.flac,.ogg,.aac,.m4a", true)
+			bodyContent = body.Tool("🔊 Volume Booster", "Apply", settings.Boost(), ".mp3,.wav,.flac,.ogg,.opus,.aiff", true)
 		default:
 			http.NotFound(w, r)
 			return
