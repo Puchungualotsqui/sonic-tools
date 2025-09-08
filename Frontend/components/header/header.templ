@@ -1,84 +1,61 @@
 package header
 
+import (
+	"frontend/static/data"
+	"strings"
+)
 
-templ Header() {
+templ Header(formats []data.Format) {
 	<div class="navbar bg-base-300 px-6">
-	  <!-- Left: Logo + Tool buttons -->
-	  <div class="flex flex-1 items-center gap-4">
-	    <a hx-get="/" hx-target="#body-container" hx-swap="innerHTML" hx-push-url="/" class="text-xl font-bold whitespace-nowrap select-none cursor-pointer">
-		  Sonic Tools 🎵
-		</a>
+		<div class="flex items-center gap-8">
+			<a hx-get="/" hx-target="#body-container" hx-swap="innerHTML" hx-push-url="/"
+			   class="text-xl font-bold whitespace-nowrap cursor-pointer select-none">
+				Sonic Tools 🎵
+			</a>
 
-	    <!-- Tools menu (desktop) -->
-	    <ul class="hidden md:flex menu menu-horizontal gap-2">
-		  <li class="flex-1">
-		    <a hx-get="/compress" hx-target="#body-container" hx-swap="innerHTML" hx-push-url="/compress"
-		       class="w-28 justify-center">
-		      Compress
-		    </a>
-		  </li>
-		  <li class="flex-1">
-		    <a hx-get="/convert" hx-target="#body-container" hx-swap="innerHTML" hx-push-url="/convert"
-		       class="w-28 justify-center">
-		      Convert
-		    </a>
-		  </li>
-		  <li class="flex-1">
-		    <a hx-get="/trim" hx-target="#body-container" hx-swap="innerHTML" hx-push-url="/trim"
-		       class="w-28 justify-center">
-		      Trim
-		    </a>
-		  </li>
-		  <li class="flex-1">
-		    <a hx-get="/merge" hx-target="#body-container" hx-swap="innerHTML" hx-push-url="/merge"
-		       class="w-28 justify-center">
-		      Merge
-		    </a>
-		  </li>
-		  <li class="flex-1">
-		    <a hx-get="/metadata" hx-target="#body-container" hx-swap="innerHTML" hx-push-url="/metadata"
-		       class="w-28 justify-center">
-		      Metadata
-		    </a>
-		  </li>
-			<li class="flex-1">
-			    <a hx-get="/boost" hx-target="#body-container" hx-swap="innerHTML" hx-push-url="/boost"
-			       class="w-28 justify-center">
-					      Boost
-			    </a>
-			  </li>
-		</ul>
+			<ul class="flex gap-6 text-base font-medium">
+				for _, f := range formats {
+					<li class="relative group">
+						<a class="block px-4 py-2 rounded-md cursor-pointer select-none hover:bg-base-200 hover:text-primary transition">
+						    {f.Name} ▾
+						</a>
 
-	  </div>
+						<!-- First-level dropdown -->
+						<ul class="absolute left-0 top-full hidden group-hover:block bg-base-100 shadow-lg rounded-lg w-56 p-2 space-y-1 z-50">
+							for _, t := range f.Tools {
+								<li class="relative group/tool">
+									<a class="flex justify-between items-center py-2 px-4 rounded-md hover:bg-base-200
+									          cursor-pointer select-none block w-full"
+									   hx-get={t.Path}
+									   hx-target="#body-container"
+									   hx-swap="innerHTML">
+										{t.Name}
+										if len(t.Variants) > 0 {
+											<span>▸</span>
+										}
+									</a>
 
-	  <!-- Right: Auth buttons -->
-	  <div class="flex-none gap-2 hidden md:flex">
-	    <button class="btn btn-ghost">Log in</button>
-	    <button class="btn btn-primary">Sign up</button>
-	  </div>
-
-	  <!-- Mobile menu -->
-	  <div class="dropdown dropdown-end md:hidden">
-	    <label tabindex="0" class="btn btn-ghost">
-	      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-	           viewBox="0 0 24 24" stroke="currentColor">
-	        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-	              d="M4 6h16M4 12h16M4 18h16" />
-	      </svg>
-	    </label>
-	    <ul tabindex="0"
-	        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-	      <li><a hx-get="/compress" hx-target="#body-container" hx-swap="innerHTML">Compress</a></li>
-	      <li><a hx-get="/convert" hx-target="#body-container" hx-swap="innerHTML">Convert</a></li>
-	      <li><a hx-get="/trim" hx-target="#body-container" hx-swap="innerHTML">Trim</a></li>
-	      <li><a hx-get="/merge" hx-target="#body-container" hx-swap="innerHTML">Merge</a></li>
-	      <li><a hx-get="/metadata" hx-target="#body-container" hx-swap="innerHTML">Metadata</a></li>
-		  <li><a hx-get="/boost" hx-target="#body-container" hx-swap="innerHTML">Boost</a></li>
-	      <div class="divider"></div>
-	      <li><a>Log in</a></li>
-	      <li><a class="text-primary font-bold">Sign up</a></li>
-	    </ul>
-	  </div>
+									<!-- Submenu: only opens when THIS tool is hovered -->
+									if len(t.Variants) > 0 {
+										<ul class="absolute left-full top-0 hidden group-hover/tool:block bg-base-100 shadow-lg rounded-lg w-52 p-2 space-y-1 z-50 ml-1">
+											for _, v := range t.Variants {
+												<li>
+													<a class="block w-full py-2 px-4 rounded-md hover:bg-base-200 cursor-pointer select-none"
+													   hx-get={"/convert-" + strings.ToLower(f.Name) + "-" + strings.ToLower(v)}
+													   hx-target="#body-container"
+													   hx-swap="innerHTML">
+														{f.Name} → {v}
+													</a>
+												</li>
+											}
+										</ul>
+									}
+								</li>
+							}
+						</ul>
+					</li>
+				}
+			</ul>
+		</div>
 	</div>
-
 }

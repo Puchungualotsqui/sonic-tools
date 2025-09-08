@@ -8,7 +8,12 @@ package header
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func Header() templ.Component {
+import (
+	"frontend/static/data"
+	"strings"
+)
+
+func Header(formats []data.Format) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -29,7 +34,135 @@ func Header() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"navbar bg-base-300 px-6\"><!-- Left: Logo + Tool buttons --><div class=\"flex flex-1 items-center gap-4\"><a hx-get=\"/\" hx-target=\"#body-container\" hx-swap=\"innerHTML\" hx-push-url=\"/\" class=\"text-xl font-bold whitespace-nowrap select-none cursor-pointer\">Sonic Tools 🎵</a><!-- Tools menu (desktop) --><ul class=\"hidden md:flex menu menu-horizontal gap-2\"><li class=\"flex-1\"><a hx-get=\"/compress\" hx-target=\"#body-container\" hx-swap=\"innerHTML\" hx-push-url=\"/compress\" class=\"w-28 justify-center\">Compress</a></li><li class=\"flex-1\"><a hx-get=\"/convert\" hx-target=\"#body-container\" hx-swap=\"innerHTML\" hx-push-url=\"/convert\" class=\"w-28 justify-center\">Convert</a></li><li class=\"flex-1\"><a hx-get=\"/trim\" hx-target=\"#body-container\" hx-swap=\"innerHTML\" hx-push-url=\"/trim\" class=\"w-28 justify-center\">Trim</a></li><li class=\"flex-1\"><a hx-get=\"/merge\" hx-target=\"#body-container\" hx-swap=\"innerHTML\" hx-push-url=\"/merge\" class=\"w-28 justify-center\">Merge</a></li><li class=\"flex-1\"><a hx-get=\"/metadata\" hx-target=\"#body-container\" hx-swap=\"innerHTML\" hx-push-url=\"/metadata\" class=\"w-28 justify-center\">Metadata</a></li><li class=\"flex-1\"><a hx-get=\"/boost\" hx-target=\"#body-container\" hx-swap=\"innerHTML\" hx-push-url=\"/boost\" class=\"w-28 justify-center\">Boost</a></li></ul></div><!-- Right: Auth buttons --><div class=\"flex-none gap-2 hidden md:flex\"><button class=\"btn btn-ghost\">Log in</button> <button class=\"btn btn-primary\">Sign up</button></div><!-- Mobile menu --><div class=\"dropdown dropdown-end md:hidden\"><label tabindex=\"0\" class=\"btn btn-ghost\"><svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 6h16M4 12h16M4 18h16\"></path></svg></label><ul tabindex=\"0\" class=\"menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52\"><li><a hx-get=\"/compress\" hx-target=\"#body-container\" hx-swap=\"innerHTML\">Compress</a></li><li><a hx-get=\"/convert\" hx-target=\"#body-container\" hx-swap=\"innerHTML\">Convert</a></li><li><a hx-get=\"/trim\" hx-target=\"#body-container\" hx-swap=\"innerHTML\">Trim</a></li><li><a hx-get=\"/merge\" hx-target=\"#body-container\" hx-swap=\"innerHTML\">Merge</a></li><li><a hx-get=\"/metadata\" hx-target=\"#body-container\" hx-swap=\"innerHTML\">Metadata</a></li><li><a hx-get=\"/boost\" hx-target=\"#body-container\" hx-swap=\"innerHTML\">Boost</a></li><div class=\"divider\"></div><li><a>Log in</a></li><li><a class=\"text-primary font-bold\">Sign up</a></li></ul></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"navbar bg-base-300 px-6\"><div class=\"flex items-center gap-8\"><a hx-get=\"/\" hx-target=\"#body-container\" hx-swap=\"innerHTML\" hx-push-url=\"/\" class=\"text-xl font-bold whitespace-nowrap cursor-pointer select-none\">Sonic Tools 🎵</a><ul class=\"flex gap-6 text-base font-medium\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for _, f := range formats {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<li class=\"relative group\"><a class=\"block px-4 py-2 rounded-md cursor-pointer select-none hover:bg-base-200 hover:text-primary transition\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var2 string
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(f.Name)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/header/header.templ`, Line: 20, Col: 17}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " ▾</a><!-- First-level dropdown --><ul class=\"absolute left-0 top-full hidden group-hover:block bg-base-100 shadow-lg rounded-lg w-56 p-2 space-y-1 z-50\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			for _, t := range f.Tools {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<li class=\"relative group/tool\"><a class=\"flex justify-between items-center py-2 px-4 rounded-md hover:bg-base-200\n\t\t\t\t\t\t\t\t\t          cursor-pointer select-none block w-full\" hx-get=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var3 string
+				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(t.Path)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/header/header.templ`, Line: 29, Col: 26}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-target=\"#body-container\" hx-swap=\"innerHTML\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var4 string
+				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(t.Name)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/header/header.templ`, Line: 32, Col: 17}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, " ")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				if len(t.Variants) > 0 {
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<span>▸</span>")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</a><!-- Submenu: only opens when THIS tool is hovered -->")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				if len(t.Variants) > 0 {
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<ul class=\"absolute left-full top-0 hidden group-hover/tool:block bg-base-100 shadow-lg rounded-lg w-52 p-2 space-y-1 z-50 ml-1\">")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					for _, v := range t.Variants {
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<li><a class=\"block w-full py-2 px-4 rounded-md hover:bg-base-200 cursor-pointer select-none\" hx-get=\"")
+						if templ_7745c5c3_Err != nil {
+							return templ_7745c5c3_Err
+						}
+						var templ_7745c5c3_Var5 string
+						templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs("/convert-" + strings.ToLower(f.Name) + "-" + strings.ToLower(v))
+						if templ_7745c5c3_Err != nil {
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/header/header.templ`, Line: 44, Col: 88}
+						}
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+						if templ_7745c5c3_Err != nil {
+							return templ_7745c5c3_Err
+						}
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" hx-target=\"#body-container\" hx-swap=\"innerHTML\">")
+						if templ_7745c5c3_Err != nil {
+							return templ_7745c5c3_Err
+						}
+						var templ_7745c5c3_Var6 string
+						templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(f.Name)
+						if templ_7745c5c3_Err != nil {
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/header/header.templ`, Line: 47, Col: 21}
+						}
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+						if templ_7745c5c3_Err != nil {
+							return templ_7745c5c3_Err
+						}
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, " → ")
+						if templ_7745c5c3_Err != nil {
+							return templ_7745c5c3_Err
+						}
+						var templ_7745c5c3_Var7 string
+						templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(v)
+						if templ_7745c5c3_Err != nil {
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/header/header.templ`, Line: 47, Col: 29}
+						}
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+						if templ_7745c5c3_Err != nil {
+							return templ_7745c5c3_Err
+						}
+						templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</a></li>")
+						if templ_7745c5c3_Err != nil {
+							return templ_7745c5c3_Err
+						}
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</ul>")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</li>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</ul></li>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</ul></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

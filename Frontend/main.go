@@ -8,6 +8,8 @@ import (
 	"frontend/components/settings"
 	"frontend/views"
 
+	"frontend/static/data"
+
 	"github.com/a-h/templ"
 )
 
@@ -49,7 +51,7 @@ func main() {
 		}
 
 		// Otherwise render full page
-		views.Layout(bodyContent).Render(r.Context(), w)
+		views.Layout(bodyContent, data.Formats).Render(r.Context(), w)
 	})
 
 	log.Println("Frontend running at http://localhost:3000")

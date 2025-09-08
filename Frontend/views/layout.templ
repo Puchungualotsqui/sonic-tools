@@ -3,9 +3,10 @@ package views
 import (
 	 "frontend/components/header"
 	"frontend/components/footer"
+	"frontend/static/data"
 )
 
-templ Layout(content templ.Component) {
+templ Layout(content templ.Component, formats []data.Format) {
 	<!DOCTYPE html>
 		<html lang="en">
 		<head>
@@ -167,7 +168,7 @@ templ Layout(content templ.Component) {
 		</head>
 		<body class="min-h-screen flex flex-col bg-base-200" x-data>
 			<div id="header-container">
-				@header.Header()
+				@header.Header(formats)
 
 			</div>
 			<div id="body-container">
