@@ -28,7 +28,8 @@ templ Header(formats []data.Format) {
 									          cursor-pointer select-none block w-full"
 									   hx-get={t.Path}
 									   hx-target="#body-container"
-									   hx-swap="innerHTML">
+									   hx-swap="innerHTML"
+										hx-push-url="true">
 										{t.Name}
 										if len(t.Variants) > 0 {
 											<span>▸</span>
@@ -43,7 +44,8 @@ templ Header(formats []data.Format) {
 													<a class="block w-full py-2 px-4 rounded-md hover:bg-base-200 cursor-pointer select-none"
 													   hx-get={"/convert-" + strings.ToLower(f.Name) + "-" + strings.ToLower(v)}
 													   hx-target="#body-container"
-													   hx-swap="innerHTML">
+													   hx-swap="innerHTML"
+														hx-push-url="true">
 														{f.Name} → {v}
 													</a>
 												</li>

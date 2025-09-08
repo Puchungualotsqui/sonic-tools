@@ -5,20 +5,22 @@ import (
 	"frontend/components/apply_button"
 )
 
-templ Tool(title, buttonText string, settings templ.Component, accept string, multiple bool) {
+templ Tool(title, subtitle, description, buttonText string, settings templ.Component, accept string, multiple bool) {
 	<section class="pt-8 pb-12 px-6 max-w-3xl mx-auto">
-	  <h1 class="text-3xl font-bold text-center mb-8">{ title }</h1>
+		<h1 class="text-3xl font-bold text-center mb-8">{ title }</h1>
+		<h2 class="text-xl font-semibold text-center mb-2">{ subtitle }</h2>
+		<p class="text-center text-gray-600 mb-6">{ description }</p>
 
-	<form  action="/upload" method="post" enctype="multipart/form-data" id="toolForm">
+		<form  action="/upload" method="post" enctype="multipart/form-data" id="toolForm">
 
-	  <!-- Upload area -->
-	  @upload_area.UploadArea(accept, multiple)
+		<!-- Upload area -->
+		@upload_area.UploadArea(accept, multiple)
 
-	  @settings
+		@settings
 
-	  <!-- Submit -->
-	  @apply_button.ApplyButton(buttonText)
-	  </form>
+		<!-- Submit -->
+		@apply_button.ApplyButton(buttonText)
+		</form>
 	</section>
 
 }

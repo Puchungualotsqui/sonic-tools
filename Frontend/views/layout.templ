@@ -6,13 +6,17 @@ import (
 	"frontend/static/data"
 )
 
-templ Layout(content templ.Component, formats []data.Format) {
+templ Layout(content, metaData templ.Component, formats []data.Format) {
 	<!DOCTYPE html>
 		<html lang="en">
 		<head>
-			<meta charset="UTF-8" />
-			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-			<title>Hello World</title>
+			<meta charset="utf-8" />
+    		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      		<link rel="icon" href="/favicon.ico" sizes="any">
+
+
+			@metaData
 
 			<!-- Tailwind + DaisyUI -->
 			<link href="/static/css/output.css" rel="stylesheet">
@@ -106,7 +110,7 @@ templ Layout(content templ.Component, formats []data.Format) {
           });
 
           settingsObj["fileOrder"] = this.files.map(f => f.file.name);
-          settingsObj["tool"] = window.location.pathname.replace("/", "") || "home";
+          settingsObj["tool"] = (window.location.pathname.replace("/", "").split("-")[0]) || "home";
 
           settingsJSON = JSON.stringify(settingsObj);
         }

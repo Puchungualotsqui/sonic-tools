@@ -1,5 +1,6 @@
 localhost {
 	log
+	tls internal
 
 	route /api/* {
 		uri strip_prefix /api

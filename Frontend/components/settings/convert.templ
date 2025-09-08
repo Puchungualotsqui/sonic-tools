@@ -1,35 +1,29 @@
 package settings
 
+import (
+	"strings"
+	"frontend/static/data"
+)
 
-templ Convert() {
+templ Convert(target string) {
 	<div>
-   <h3 class="text-lg font-semibold mb-3">Select Output Format</h3>
-   <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-     <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
-       <input type="radio" name="format" value="mp3" class="radio radio-sm" checked>
-       <span>MP3</span>
-     </label>
-     <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
-       <input type="radio" name="format" value="wav" class="radio radio-sm">
-       <span>WAV</span>
-     </label>
-     <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
-       <input type="radio" name="format" value="flac" class="radio radio-sm">
-       <span>FLAC</span>
-     </label>
-     <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
-       <input type="radio" name="format" value="ogg" class="radio radio-sm">
-       <span>OGG</span>
-     </label>
-     <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
-       <input type="radio" name="format" value="opus" class="radio radio-sm">
-       <span>OPUS</span>
-     </label>
-     <label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
-       <input type="radio" name="format" value="aiff" class="radio radio-sm">
-       <span>AIFF</span>
-     </label>
-   </div>
+	if target == "" {
+	   <h3 class="text-lg font-semibold mb-3">Select Output Format</h3>
+	   <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+
+	   for _, item := range data.FormatNames {
+	  	<label class="flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200">
+	     <input type="radio" name="format" value={ strings.ToLower(item) } class="radio radio-sm" checked>
+	     <span>{ item }</span>
+	   </label>
+
+	   }
+	</div>
+   } else {
+  	<input type="radio" name="format" value={ strings.ToLower(target) } class="hidden" checked />
+   }
+
+
  </div>
 
  <!-- Bitrate -->

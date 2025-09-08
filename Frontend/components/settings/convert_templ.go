@@ -8,7 +8,12 @@ package settings
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func Convert() templ.Component {
+import (
+	"frontend/static/data"
+	"strings"
+)
+
+func Convert(target string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -29,7 +34,71 @@ func Convert() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div><h3 class=\"text-lg font-semibold mb-3\">Select Output Format</h3><div class=\"grid grid-cols-2 sm:grid-cols-3 gap-3\"><label class=\"flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200\"><input type=\"radio\" name=\"format\" value=\"mp3\" class=\"radio radio-sm\" checked> <span>MP3</span></label> <label class=\"flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200\"><input type=\"radio\" name=\"format\" value=\"wav\" class=\"radio radio-sm\"> <span>WAV</span></label> <label class=\"flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200\"><input type=\"radio\" name=\"format\" value=\"flac\" class=\"radio radio-sm\"> <span>FLAC</span></label> <label class=\"flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200\"><input type=\"radio\" name=\"format\" value=\"ogg\" class=\"radio radio-sm\"> <span>OGG</span></label> <label class=\"flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200\"><input type=\"radio\" name=\"format\" value=\"opus\" class=\"radio radio-sm\"> <span>OPUS</span></label> <label class=\"flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200\"><input type=\"radio\" name=\"format\" value=\"aiff\" class=\"radio radio-sm\"> <span>AIFF</span></label></div></div><!-- Bitrate --><div><h3 class=\"text-lg font-semibold mb-3\">Bitrate (kbps)</h3><input type=\"number\" name=\"bitrate\" min=\"32\" max=\"320\" step=\"1\" placeholder=\"128\" class=\"input input-bordered w-full placeholder:text-gray-400 placeholder:opacity-60\" oninput=\"if(this.value === '0') this.value = ''\" onkeydown=\"return event.key >= '0' && event.key <= '9' || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'\"><p class=\"text-sm opacity-70 mt-1\">Typical values: 128 (standard), 192 (good), 320 (high quality)</p></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if target == "" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<h3 class=\"text-lg font-semibold mb-3\">Select Output Format</h3><div class=\"grid grid-cols-2 sm:grid-cols-3 gap-3\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			for _, item := range data.FormatNames {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<label class=\"flex items-center gap-2 border rounded-lg p-2 cursor-pointer hover:bg-base-200\"><input type=\"radio\" name=\"format\" value=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var2 string
+				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(strings.ToLower(item))
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/settings/convert.templ`, Line: 16, Col: 69}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"radio radio-sm\" checked> <span>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var3 string
+				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(item)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/settings/convert.templ`, Line: 17, Col: 18}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</span></label>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		} else {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<input type=\"radio\" name=\"format\" value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strings.ToLower(target))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/settings/convert.templ`, Line: 23, Col: 68}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"hidden\" checked>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><!-- Bitrate --><div><h3 class=\"text-lg font-semibold mb-3\">Bitrate (kbps)</h3><input type=\"number\" name=\"bitrate\" min=\"32\" max=\"320\" step=\"1\" placeholder=\"128\" class=\"input input-bordered w-full placeholder:text-gray-400 placeholder:opacity-60\" oninput=\"if(this.value === '0') this.value = ''\" onkeydown=\"return event.key >= '0' && event.key <= '9' || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'\"><p class=\"text-sm opacity-70 mt-1\">Typical values: 128 (standard), 192 (good), 320 (high quality)</p></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

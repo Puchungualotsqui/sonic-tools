@@ -1,6 +1,9 @@
 package data
 
-import "strings"
+import (
+	"slices"
+	"strings"
+)
 
 type Tool struct {
 	Name     string
@@ -13,24 +16,36 @@ type Format struct {
 	Tools []Tool
 }
 
+// Tool exceptions
+var skipTools = map[string][]string{
+	"Compress": {"WAV", "FLAC", "AIFF", "ALAC"}, // these can't be compressed
+	"Metadata": {"WAV", "AIFF"},
+}
+
+// raw list of format names
+var FormatNames = []string{"MP3", "WAV", "FLAC", "OGG", "OPUS", "AIFF", "AAC", "M4A", "ALAC", "WMA"}
+
+// exported full format definitions
 var Formats []Format
 
 func init() {
-	formats := []string{"MP3", "WAV", "FLAC", "OGG", "OPUS", "AIFF", "AAC", "M4A", "ALAC", "WMA"}
-
-	for _, f := range formats {
-		// build tools for each format
+	for _, f := range FormatNames {
 		tools := []Tool{
 			{
 				Name:     "Convert",
 				Path:     "/convert-" + lower(f),
-				Variants: without(formats, f), // all other formats
+				Variants: without(FormatNames, f),
 			},
-			{Name: "Compress", Path: "/compress-" + lower(f)},
-			{Name: "Trim", Path: "/trim-" + lower(f)},
-			{Name: "Merge", Path: "/merge-" + lower(f)},
-			{Name: "Metadata", Path: "/metadata-" + lower(f)},
-			{Name: "Boost", Path: "/boost-" + lower(f)},
+		}
+
+		for _, t := range []string{"Compress", "Trim", "Merge", "Metadata", "Boost"} {
+			if slices.Contains(skipTools[t], f) {
+				continue // skip invalid combos
+			}
+			tools = append(tools, Tool{
+				Name: t,
+				Path: "/" + strings.ToLower(t) + "-" + lower(f),
+			})
 		}
 
 		Formats = append(Formats, Format{

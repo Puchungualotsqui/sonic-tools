@@ -1,0 +1,7 @@
+package head
+
+templ MetaData(title string, description string) {
+    <title hx-swap-oob="true">{ title }</title>
+
+    <meta name="description" content={ description } hx-swap-oob="true"/>
+}

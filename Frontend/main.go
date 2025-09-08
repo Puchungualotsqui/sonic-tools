@@ -4,14 +4,17 @@ import (
 	"log"
 	"net/http"
 
-	"frontend/components/body"
-	"frontend/components/settings"
+	"frontend/components/head"
+	"frontend/static/data"
 	"frontend/views"
 
-	"frontend/static/data"
-
 	"github.com/a-h/templ"
+
+	"frontend/router"
 )
+
+const metaTitle = "Sonic Tools – Free Online Audio Editor"
+const metaDesc = "Edit, convert, compress, trim, merge, and boost your audio files online. 100% free, secure, and works directly in your browser."
 
 func main() {
 	http.Handle("/static/",
@@ -22,36 +25,44 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		var bodyContent templ.Component
+		var metaData templ.Component
 
-		switch r.URL.Path {
-		case "/":
-			bodyContent = body.Home()
-		case "/compress":
-			bodyContent = body.Tool("🎚️ Compress Your Audio", "Compress", settings.Compress(), ".mp3,.ogg,.aac", true)
-		case "/convert":
-			bodyContent = body.Tool("🔄 Convert Your Audio", "Convert", settings.Convert(), ".mp3,.wav,.flac,.ogg,.opus,.aiff", true)
-		case "/trim":
-			bodyContent = body.Tool("✂️ Trim Your Audio", "Trim", settings.Trim(), ".mp3,.wav,.flac,.ogg,.opus,.aiff", false)
-		case "/merge":
-			bodyContent = body.Tool("➕ Merge Your Audio", "Merge", settings.Merge(), ".mp3,.wav,.flac,.ogg,.opus,.aiff", true)
-		case "/metadata":
-			bodyContent = body.Tool("🏷️ Edit Metadata", "Save metadata", settings.Metadata(), ".mp3,.wav,.flac,.ogg,.opus,.aiff", false)
-		case "/boost":
-			bodyContent = body.Tool("🔊 Volume Booster", "Apply", settings.Boost(), ".mp3,.wav,.flac,.ogg,.opus,.aiff", true)
-		default:
-			http.NotFound(w, r)
-			return
+		bodyContent, metaData = router.GetBodyDynamicTool(r)
+		if bodyContent == nil {
+			bodyContent, metaData = router.GetBodySpecificTool(r)
+			if bodyContent == nil {
+				http.NotFound(w, r)
+				return
+			}
+		}
+
+		if metaData == nil {
+			metaData = head.MetaData(metaTitle, metaDesc)
+
 		}
 
 		// Check if request comes from HTMX
 		if r.Header.Get("HX-Request") == "true" {
 			// Only return the fragment for HTMX swaps
 			bodyContent.Render(r.Context(), w)
+			metaData.Render(r.Context(), w)
 			return
 		}
 
 		// Otherwise render full page
-		views.Layout(bodyContent, data.Formats).Render(r.Context(), w)
+		views.Layout(bodyContent, metaData, data.Formats).Render(r.Context(), w)
+	})
+
+	http.HandleFunc("/sitemap.xml", data.SitemapHandler)
+
+	// robots.txt
+	http.HandleFunc("/robots.txt", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./static/assets/robots.txt")
+	})
+
+	// favicon.ico
+	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./static/assets/favicon.ico")
 	})
 
 	log.Println("Frontend running at http://localhost:3000")

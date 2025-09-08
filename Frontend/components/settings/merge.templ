@@ -1,17 +1,23 @@
 package settings
 
+import (
+	"strings"
+	"frontend/static/data"
+)
 
-templ Merge() {
+templ Merge(target string) {
 	<div>
-   <h3 class="text-lg font-semibold mb-3">Output Format</h3>
-   <select name="format" class="select select-bordered w-full">
-     <option value="mp3" selected>MP3</option>
-     <option value="wav">WAV</option>
-     <option value="flac">FLAC</option>
-     <option value="ogg">OGG</option>
-     <option value="opus">OPUS</option>
-     <option value="aiff">AIFF</option>
-   </select>
+	if target == ""{
+		<h3 class="text-lg font-semibold mb-3">Output Format</h3>
+		<select name="format" class="select select-bordered w-full">
+			for _, item := range data.FormatNames {
+				<option value={ strings.ToLower(item) } selected>{ item }</option>
+			}
+		</select>
+	} else {
+		<input type="radio" name="format" value={ strings.ToLower(target) } class="hidden" checked />
+	}
+
  </div>
 
 

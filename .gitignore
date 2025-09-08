@@ -6,3 +6,4 @@ Frontend/.air.toml
 Frontend/tmp
 .buildCommands
 Services/rust-audio/target
+Frontend/node_modules
