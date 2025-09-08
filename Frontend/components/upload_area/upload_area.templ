@@ -51,6 +51,13 @@ templ UploadArea(accept string, multiple bool) {
                 <span class="font-medium truncate" x-text="item.file.name"></span>
                 <span class="opacity-60 ml-2" x-text="$store.uploader.formatSize(item.file.size)"></span>
               </div>
+              <button
+            class="btn btn-ghost btn-xs text-error ml-2"
+            @click="$store.uploader.removeFile(item.id)"
+            title="Remove file"
+            >
+            ✕
+            </button>
             </div>
             <progress class="progress progress-primary w-full mt-1" :value="item.progress" max="100"></progress>
           </div>

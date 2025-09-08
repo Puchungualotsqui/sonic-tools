@@ -18,7 +18,7 @@ templ Boost() {
     </div>
 
     <!-- Gain slider -->
-    <div x-show="mode === 'manual'" class="space-y-2">
+    <div x-show="mode === 'manual'" class="space-y-2 w-full">
       <label class="font-medium">Gain (dB)</label>
       <input
         type="range"
@@ -26,7 +26,7 @@ templ Boost() {
         min="-20"
         max="20"
         x-model="gain"
-        class="range"
+        class="range range-primary w-full"
       />
       <div class="flex justify-between text-base font-medium px-1">
         <span>-20 dB</span>

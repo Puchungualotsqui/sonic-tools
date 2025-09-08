@@ -20,7 +20,7 @@ templ Compress() {
     </div>
 
     <!-- Percentage -->
-    <div x-show="method === 'percentage'" class="space-y-2">
+    <div x-show="method === 'percentage'" class="space-y-2 w-full">
       <label class="font-medium">Percentage</label>
       <input
         type="range"
@@ -28,7 +28,7 @@ templ Compress() {
         min="0"
         max="100"
         value="50"
-        class="range"
+        class="range range-primary w-full"
         x-on:input="$refs.percentageValue.innerText = $el.value + '%'"
       />
       <div class="flex justify-between text-base font-medium px-1">
@@ -37,6 +37,7 @@ templ Compress() {
         <span>100%</span>
       </div>
     </div>
+
 
     <!-- MB -->
     <div x-show="method === 'mb'" class="space-y-2">

@@ -14,8 +14,8 @@ templ Layout(content templ.Component) {
 			<title>Hello World</title>
 
 			<!-- Tailwind + DaisyUI -->
-			<script src="https://cdn.tailwindcss.com"></script>
-			<link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.css" rel="stylesheet" />
+			<link href="/static/css/output.css" rel="stylesheet">
+
 
 			<!-- HTMX -->
 			<script src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -61,6 +61,10 @@ templ Layout(content templ.Component) {
 
         this.rejectedCount += rejects;
       },
+
+      removeFile(id) {
+            this.files = this.files.filter(f => f.id !== id);
+          },
 
       reset() {
         this.files = []
@@ -164,6 +168,7 @@ templ Layout(content templ.Component) {
 		<body class="min-h-screen flex flex-col bg-base-200" x-data>
 			<div id="header-container">
 				@header.Header()
+
 			</div>
 			<div id="body-container">
 				@content

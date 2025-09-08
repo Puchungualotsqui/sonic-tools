@@ -1,0 +1,18 @@
+{
+  "devDependencies": {
+    "daisyui": "^5.1.8",
+    "tailwindcss": "^3.4.17"
+  },
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "dev": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch",
+    "build": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
