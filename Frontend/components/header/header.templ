@@ -7,20 +7,22 @@ import (
 
 templ Header(formats []data.Format) {
 	<div class="navbar bg-base-300 px-6">
-		<div class="flex items-center gap-8">
+		<div class="flex items-center gap-3 md:gap-8 w-full">
+
 			<a hx-get="/" hx-target="#body-container" hx-swap="innerHTML" hx-push-url="/"
 			   class="text-xl font-bold whitespace-nowrap cursor-pointer select-none">
 				Sonic Tools 🎵
 			</a>
 
-			<ul class="flex gap-6 text-base font-medium">
+			<!-- ===================== DESKTOP NAV (md+) ===================== -->
+			<ul class="hidden md:flex gap-6 text-base font-medium">
 				for _, f := range formats {
 					<li class="relative group">
 						<a class="block px-4 py-2 rounded-md cursor-pointer select-none hover:bg-base-200 hover:text-primary transition">
-						    {f.Name} ▾
+							{f.Name} ▾
 						</a>
 
-						<!-- First-level dropdown -->
+						<!-- First-level dropdown (hover) -->
 						<ul class="absolute left-0 top-full hidden group-hover:block bg-base-100 shadow-lg rounded-lg w-56 p-2 space-y-1 z-50">
 							for _, t := range f.Tools {
 								<li class="relative group/tool">
@@ -29,23 +31,23 @@ templ Header(formats []data.Format) {
 									   hx-get={t.Path}
 									   hx-target="#body-container"
 									   hx-swap="innerHTML"
-										hx-push-url="true">
+									   hx-push-url="true">
 										{t.Name}
 										if len(t.Variants) > 0 {
 											<span>▸</span>
 										}
 									</a>
 
-									<!-- Submenu: only opens when THIS tool is hovered -->
+									<!-- Second-level (hover) -->
 									if len(t.Variants) > 0 {
-										<ul class="absolute left-full top-[-9px] hidden group-hover/tool:block bg-base-100 shadow-lg rounded-lg w-52 p-2 space-y-1 z-50 ">
+										<ul class="absolute left-full top-[-9px] hidden group-hover/tool:block bg-base-100 shadow-lg rounded-lg w-52 p-2 space-y-1 z-50">
 											for _, v := range t.Variants {
 												<li>
 													<a class="block w-full py-2 px-4 rounded-md hover:bg-base-200 cursor-pointer select-none"
 													   hx-get={"/convert-" + strings.ToLower(f.Name) + "-" + strings.ToLower(v)}
 													   hx-target="#body-container"
 													   hx-swap="innerHTML"
-														hx-push-url="true">
+													   hx-push-url="true">
 														{f.Name} → {v}
 													</a>
 												</li>
@@ -58,6 +60,86 @@ templ Header(formats []data.Format) {
 					</li>
 				}
 			</ul>
+
+			<!-- ===================== MOBILE NAV (< md) ===================== -->
+			<div class="ml-auto md:hidden" x-data="{ menu:false }">
+				<button class="btn btn-ghost" @click="menu = !menu" :aria-expanded="menu" aria-controls="mobile-nav">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+					</svg>
+				</button>
+
+				<!-- Drawer -->
+				<div id="mobile-nav" x-show="menu" x-transition.opacity.duration.150ms class="fixed inset-0 z-[60]" x-cloak>
+					<!-- Backdrop -->
+					<div class="absolute inset-0 bg-black/40" @click="menu=false"></div>
+
+					<!-- Panel -->
+					<div class="absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-base-100 shadow-xl p-4 overflow-y-auto">
+						<div class="flex items-center justify-between mb-2">
+							<span class="text-lg font-semibold">Menu</span>
+							<button class="btn btn-sm btn-ghost" @click="menu=false">✕</button>
+						</div>
+
+						<ul class="space-y-2">
+							for _, f := range formats {
+								<li>
+									<!-- First-level accordion -->
+									<details class="bg-base-200 rounded-lg" role="group">
+										<summary class="cursor-pointer px-4 py-3 text-base font-medium outline-none select-none">
+											{f.Name}
+										</summary>
+										<div class="px-2 pb-2 pt-1">
+											<ul class="space-y-1">
+												for _, t := range f.Tools {
+													if len(t.Variants) == 0 {
+														<li>
+															<a class="block py-2 px-3 rounded hover:bg-base-300"
+															   hx-get={t.Path}
+															   hx-target="#body-container"
+															   hx-swap="innerHTML"
+															   hx-push-url="true"
+															   @click="$nextTick(() => { menu=false })">
+																{t.Name}
+															</a>
+														</li>
+													} else {
+														<li>
+															<!-- Second-level accordion -->
+															<details class="bg-base-100 rounded-lg" role="group">
+																<summary class="cursor-pointer py-2 px-3 rounded hover:bg-base-200 outline-none select-none">
+																	{t.Name}
+																</summary>
+																<div class="pl-2 pr-1 pb-2 pt-1">
+																	<ul class="space-y-1">
+																		for _, v := range t.Variants {
+																			<li>
+																				<a class="block py-2 px-3 rounded hover:bg-base-200"
+																				   hx-get={"/convert-" + strings.ToLower(f.Name) + "-" + strings.ToLower(v)}
+																				   hx-target="#body-container"
+																				   hx-swap="innerHTML"
+																				   hx-push-url="true"
+																				   @click="$nextTick(() => { menu=false })">
+																					{f.Name} → {v}
+																				</a>
+																			</li>
+																		}
+																	</ul>
+																</div>
+															</details>
+														</li>
+													}
+												}
+											</ul>
+										</div>
+									</details>
+								</li>
+							}
+						</ul>
+					</div>
+				</div>
+			</div>
+
 		</div>
 	</div>
 }
