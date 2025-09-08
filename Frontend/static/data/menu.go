@@ -16,7 +16,7 @@ type Format struct {
 var Formats []Format
 
 func init() {
-	formats := []string{"MP3", "WAV", "FLAC", "OGG", "OPUS", "AIFF"}
+	formats := []string{"MP3", "WAV", "FLAC", "OGG", "OPUS", "AIFF", "AAC", "M4A", "ALAC", "WMA"}
 
 	for _, f := range formats {
 		// build tools for each format

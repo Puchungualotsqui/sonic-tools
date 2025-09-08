@@ -98,7 +98,7 @@ func Header(formats []data.Format) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				if len(t.Variants) > 0 {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<ul class=\"absolute left-full top-0 hidden group-hover/tool:block bg-base-100 shadow-lg rounded-lg w-52 p-2 space-y-1 z-50 ml-1\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<ul class=\"absolute left-full top-[-9px] hidden group-hover/tool:block bg-base-100 shadow-lg rounded-lg w-52 p-2 space-y-1 z-50 \">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

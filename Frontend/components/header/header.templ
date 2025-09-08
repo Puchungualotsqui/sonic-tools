@@ -37,7 +37,7 @@ templ Header(formats []data.Format) {
 
 									<!-- Submenu: only opens when THIS tool is hovered -->
 									if len(t.Variants) > 0 {
-										<ul class="absolute left-full top-0 hidden group-hover/tool:block bg-base-100 shadow-lg rounded-lg w-52 p-2 space-y-1 z-50 ml-1">
+										<ul class="absolute left-full top-[-9px] hidden group-hover/tool:block bg-base-100 shadow-lg rounded-lg w-52 p-2 space-y-1 z-50 ">
 											for _, v := range t.Variants {
 												<li>
 													<a class="block w-full py-2 px-4 rounded-md hover:bg-base-200 cursor-pointer select-none"
