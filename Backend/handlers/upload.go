@@ -10,16 +10,15 @@ import (
 )
 
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
-	// Check uploaded files constrains
-	var err error
-	err = services.CheckRequestConstrictions(r)
+	// Validate & get file headers (also parses form)
+	files, err := services.CheckRequestConstraints(w, r)
 	if err != nil {
-		log.Println("Upload error:", err)
+		log.Println("Upload validation error:", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	// Read settings JSON if provided
+	// Read settings JSON
 	settings, err := services.ReadConfig(r)
 	if err != nil {
 		log.Println("Read config file error:", err)
@@ -28,145 +27,94 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fileOrder := utils.GetArrayString(settings["fileOrder"])
-	filesLength := len(r.MultipartForm.File["files"])
-	fileOrderLength := len(fileOrder)
-	if filesLength < 1 {
-		log.Printf("invalid files length: %d", filesLength)
-		http.Error(w, "Not files selected", http.StatusBadRequest)
-		return
-	} else if fileOrderLength != filesLength {
-		log.Printf("fileOrder length: %d, files length: %d",
-			fileOrderLength, filesLength)
-		http.Error(w, "Upload error", http.StatusBadRequest)
+	if len(fileOrder) != len(files) {
+		log.Printf("fileOrder length: %d, files length: %d", len(fileOrder), len(files))
+		http.Error(w, "upload error: file order does not match number of files", http.StatusBadRequest)
 		return
 	}
 
-	files := services.OrderFiles(r.MultipartForm.File["files"], fileOrder)
+	ordered := services.OrderFiles(files, fileOrder)
+	if len(ordered) != len(files) {
+		http.Error(w, "upload error: unknown filenames in file order", http.StatusBadRequest)
+		return
+	}
 
-	fileData, fileNames, err := services.ReadUploadedFiles(files)
+	fileData, fileNames, err := services.ReadUploadedFiles(ordered)
 	if err != nil {
-		http.Error(w, "Failed to read uploaded files: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "failed to read uploaded files: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	tool := settings["tool"]
 
+	tool := utils.TryGetValue(settings, "tool", "")
 	var resp *audio.AudioResponse
 
 	switch tool {
 	case "compress":
-		method := settings["method"]
+		method := utils.TryGetValue(settings, "method", "")
 		switch method {
 		case "mb":
 			targetSize := utils.TryGetValue(settings, "mb", int32(1))
 			resp, err = services.CompressSize(fileData, fileNames, targetSize)
-			if err != nil {
-				http.Error(w, "Compression failed: "+err.Error(), http.StatusInternalServerError)
-				return
-			}
 		case "percentage":
 			targetPercentage := utils.TryGetValue(settings, "percentage", int32(1))
 			resp, err = services.CompressPercentage(fileData, fileNames, targetPercentage)
-			if err != nil {
-				http.Error(w, "Compression failed: "+err.Error(), http.StatusInternalServerError)
-				return
-			}
 		case "quality":
 			quality := utils.TryGetValue(settings, "quality", "medium")
 			resp, err = services.CompressQuality(fileData, fileNames, quality)
-			if err != nil {
-				http.Error(w, "Compression failed: "+err.Error(), http.StatusInternalServerError)
-				return
-			}
+		default:
+			err = fmt.Errorf("invalid compress method")
 		}
-
 	case "convert":
 		format := utils.TryGetValue(settings, "format", "mp3")
 		bitrate := utils.TryGetValue(settings, "bitrate", int32(128))
 		resp, err = services.Convert(fileData, fileNames, format, bitrate)
-		if err != nil {
-			http.Error(w, "Conversion failed: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-
 	case "trim":
 		start := utils.TryGetValue(settings, "start", "00:00")
 		end := utils.TryGetValue(settings, "end", "59:59")
 		mode := utils.TryGetValue(settings, "mode", "keep")
-
-		startSeconds, err := utils.ParseToSeconds(start)
-		if err != nil {
-			fmt.Println("Invalid start time")
-			http.Error(w, "invalid start time: "+err.Error(), http.StatusBadRequest)
+		startSeconds, err1 := utils.ParseToSeconds(start)
+		endSeconds, err2 := utils.ParseToSeconds(end)
+		if err1 != nil || err2 != nil {
+			http.Error(w, "invalid start/end time", http.StatusBadRequest)
 			return
 		}
-		fmt.Println("Start seconds: ", startSeconds)
-
-		endSeconds, err := utils.ParseToSeconds(end)
-		if err != nil {
-			fmt.Println("Invalid end time")
-			http.Error(w, "invalid end time: "+err.Error(), http.StatusBadRequest)
-			return
-		}
-		fmt.Println("End seconds: ", endSeconds)
-
-		resp, err = services.Trim(
-			fileData[0],
-			fileNames[0],
-			int32(startSeconds),
-			int32(endSeconds),
-			mode,
-		)
-		if err != nil {
-			http.Error(w, "trim failed: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-
+		resp, err = services.Trim(fileData[0], fileNames[0], int32(startSeconds), int32(endSeconds), mode)
 	case "merge":
 		format := utils.TryGetValue(settings, "format", "mp3")
 		resp, err = services.Merge(fileData, fileNames, format)
-		if err != nil {
-			http.Error(w, "Merge failed: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-
 	case "metadata":
 		title := utils.TryGetValue(settings, "title", "")
 		artist := utils.TryGetValue(settings, "artist", "")
 		album := utils.TryGetValue(settings, "album", "")
 		year := utils.TryGetValue(settings, "year", "")
-		cover, err := services.GetCover(r)
-		if err != nil {
-			log.Println("Cover error:", err)
+		cover, cerr := services.GetCover(r)
+		if cerr != nil {
+			log.Println("Cover read error:", cerr)
 		}
-		log.Printf("Cover bytes length: %d", len(cover))
 		resp, err = services.Metadata(fileData[0], fileNames[0], title, artist, album, year, cover)
-		if err != nil {
-			http.Error(w, "Metadata change failed: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-
 	case "boost":
 		mode := utils.TryGetValue(settings, "mode", "boost")
 		switch mode {
 		case "manual":
 			gain := utils.TryGetValue(settings, "gain", int32(0))
 			resp, err = services.BoostManual(fileData, fileNames, gain)
-			if err != nil {
-				http.Error(w, "Boost manual failed: "+err.Error(), http.StatusInternalServerError)
-				return
-			}
-
 		case "normalize":
 			resp, err = services.BoostNormalize(fileData, fileNames)
-			if err != nil {
-				http.Error(w, "Boost normalize failed: "+err.Error(), http.StatusInternalServerError)
-				return
-			}
+		default:
+			err = fmt.Errorf("invalid boost mode")
 		}
+	default:
+		http.Error(w, "invalid tool", http.StatusBadRequest)
+		return
 	}
 
-	// Set headers so browser downloads the file
-	w.Header().Set("Content-Disposition", "attachment; filename="+resp.Filename)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Download response
 	w.Header().Set("Content-Type", "application/octet-stream")
+	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, resp.Filename))
 	w.Write(resp.FileData)
 }
