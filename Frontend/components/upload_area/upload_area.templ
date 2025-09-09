@@ -66,14 +66,10 @@ templ UploadArea(accept string, multiple bool) {
       <!-- Feedback for skipped files -->
       <p class="text-xs text-error"
          x-show="$store.uploader.rejectedCount > 0"
-         x-text="`${$store.uploader.rejectedCount} file(s) skipped (invalid type)`">
+         x-text="`${$store.uploader.rejectedCount} file(s) skipped (invalid type, too many files, or total > 50 MB)`">
       </p>
+
 
     </div>
   </div>
-
-  <!-- Alpine component (define once on the page; safe inline here) -->
-  <script>
-
-  </script>
 }

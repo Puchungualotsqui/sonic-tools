@@ -18,12 +18,12 @@ type Format struct {
 
 // Tool exceptions
 var skipTools = map[string][]string{
-	"Compress": {"WAV", "FLAC", "AIFF", "ALAC"}, // these can't be compressed
+	"Compress": {"WAV", "FLAC", "AIFF", "AAC", "M4A", "WMA"}, // these can't be compressed
 	"Metadata": {"WAV", "AIFF"},
 }
 
 // raw list of format names
-var FormatNames = []string{"MP3", "WAV", "FLAC", "OGG", "OPUS", "AIFF", "AAC", "M4A", "ALAC", "WMA"}
+var FormatNames = []string{"MP3", "WAV", "FLAC", "OGG", "OPUS", "AIFF", "AAC", "M4A", "WMA"}
 
 // exported full format definitions
 var Formats []Format

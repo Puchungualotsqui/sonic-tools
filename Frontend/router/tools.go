@@ -23,12 +23,12 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 		metaTitle := "Audio Compressor – Free Online Tool"
 		metaDesc := "Compress MP3, OGG, AAC, M4A, and more without losing quality. Fast, free, and secure in your browser."
 
-		bodyContent = body.Tool("Online Audio Compressor – Compress MP3, OGG, AAC, M4A, ALAC, WMA",
+		bodyContent = body.Tool("Online Audio Compressor – Compress MP3, OGG, AAC, ALAC",
 			"How to Compress Audio Files Online",
 			"Upload your audio file and reduce its size without losing quality using our free online compressor.",
 			"Compress",
 			settings.Compress(),
-			".mp3,.ogg,.aac,.m4a,.alac,.wma",
+			".mp3,.ogg,.aac,.alac",
 			true)
 		metaData = head.MetaData(metaTitle, metaDesc)
 	case "/convert":
@@ -40,7 +40,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			"Choose your audio file, select the output format, and convert it instantly with our online audio converter.",
 			"Convert",
 			settings.Convert(""),
-			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.alac,.wma",
+			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.wma",
 			true)
 		metaData = head.MetaData(metaTitle, metaDesc)
 	case "/trim":
@@ -52,7 +52,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			"Upload your track and cut the beginning, end, or any unwanted parts quickly and easily.",
 			"Trim",
 			settings.Trim(),
-			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.alac,.wma",
+			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.wma",
 			false)
 		metaData = head.MetaData(metaTitle, metaDesc)
 	case "/merge":
@@ -64,7 +64,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			"Add multiple audio files and combine them into a single track in just a few clicks.",
 			"Merge",
 			settings.Merge(""),
-			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.alac,.wma",
+			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.wma",
 			true)
 		metaData = head.MetaData(metaTitle, metaDesc)
 	case "/metadata":
@@ -76,7 +76,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			"Update song details like title, artist, album, or genre directly in your browser.",
 			"Save metadata",
 			settings.Metadata(),
-			".mp3,.flac,.ogg,.opus,.aac,.m4a,.alac,.wma",
+			".mp3,.flac,.ogg,.opus,.aac,.m4a,.wma",
 			false)
 		metaData = head.MetaData(metaTitle, metaDesc)
 	case "/boost":
@@ -88,7 +88,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			"Make quiet recordings louder without distortion using our free online volume booster.",
 			"Apply",
 			settings.Boost(),
-			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.alac,.wma",
+			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.wma",
 			true)
 		metaData = head.MetaData(metaTitle, metaDesc)
 	default:

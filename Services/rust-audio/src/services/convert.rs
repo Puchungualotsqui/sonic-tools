@@ -1,8 +1,11 @@
 use crate::audio::{AudioResponse, ConvertRequest, convert_audio_server::ConvertAudio};
-use crate::utils::conversion::convert_file;
 use crate::utils::zip::make_zip;
 use std::path::Path;
 use tonic::{Request, Response, Status};
+
+fn ext_of(name: &str) -> Option<&str> {
+    Path::new(name).extension().and_then(|e| e.to_str())
+}
 
 #[derive(Debug, Default)]
 pub struct ConvertService {}
@@ -21,17 +24,25 @@ impl ConvertAudio for ConvertService {
             println!("Loop {}: got {} bytes", i, data.len());
 
             let filename = req.filenames.get(i).cloned().unwrap_or("output".into());
-            let ext = req.output_format.as_str();
+            let output_fmt = req.output_format.to_ascii_lowercase();
 
             let stem = Path::new(&filename)
                 .file_stem()
                 .and_then(|s| s.to_str())
                 .unwrap_or("output");
-            println!("Original filename: {}", filename);
 
-            let out_name = format!("{}.{}", stem, ext);
+            let out_ext = match output_fmt.as_str() {
+                "aac" => "aac",
+                "alac" | "m4a" => "m4a",
+                other => other, // mp3, wav, flac, ogg, opus, aiff...
+            };
 
-            match convert_file(data, ext, req.bitrate) {
+            let out_name = format!("{}.{}", stem, out_ext);
+
+            let input_ext = ext_of(&filename);
+
+            match crate::utils::conversion::convert_file(data, &output_fmt, req.bitrate, input_ext)
+            {
                 Ok(bytes) => outputs.push((out_name, bytes)),
                 Err(e) => return Err(Status::internal(e)),
             }

@@ -37,11 +37,11 @@ func Home() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = card.Card("/compress", "🎚️", "Compress", "Reduce file size while keeping great quality. Choose bitrate, presets, or target size.").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = card.Card("/convert", "🔄", "Convert", "MP3 ⇆ WAV ⇆ FLAC ⇆ OGG ⇆ AAC ⇆ M4A. Seamless format conversion made simple.").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = card.Card("/convert", "🔄", "Convert", "MP3 ⇆ WAV ⇆ FLAC ⇆ OGG ⇆ AAC ⇆ M4A. Seamless format conversion made simple.").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = card.Card("/compress", "🎚️", "Compress", "Reduce file size while keeping great quality. Choose bitrate, presets, or target size.").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
