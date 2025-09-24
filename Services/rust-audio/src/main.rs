@@ -15,17 +15,41 @@ use rust_audio::services::compress::CompressService;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = "[::1]:50051".parse()?;
+    let addr = "0.0.0.0:50051".parse()?;
 
     println!("Audio service running on {}", addr);
 
     Server::builder()
-        .add_service(CompressAudioServer::new(CompressService::default()))
-        .add_service(ConvertAudioServer::new(ConvertService::default()))
-        .add_service(TrimAudioServer::new(TrimService::default()))
-        .add_service(MergeAudioServer::new(MergeService::default()))
-        .add_service(MetadataAudioServer::new(MetadataService::default()))
-        .add_service(BoostAudioServer::new(BoostService::default()))
+        .add_service(
+            CompressAudioServer::new(CompressService::default())
+                .max_decoding_message_size(100 * 1024 * 1024)
+                .max_encoding_message_size(100 * 1024 * 1024),
+        )
+        .add_service(
+            ConvertAudioServer::new(ConvertService::default())
+                .max_decoding_message_size(100 * 1024 * 1024)
+                .max_encoding_message_size(100 * 1024 * 1024),
+        )
+        .add_service(
+            TrimAudioServer::new(TrimService::default())
+                .max_decoding_message_size(100 * 1024 * 1024)
+                .max_encoding_message_size(100 * 1024 * 1024),
+        )
+        .add_service(
+            MergeAudioServer::new(MergeService::default())
+                .max_decoding_message_size(100 * 1024 * 1024)
+                .max_encoding_message_size(100 * 1024 * 1024),
+        )
+        .add_service(
+            MetadataAudioServer::new(MetadataService::default())
+                .max_decoding_message_size(100 * 1024 * 1024)
+                .max_encoding_message_size(100 * 1024 * 1024),
+        )
+        .add_service(
+            BoostAudioServer::new(BoostService::default())
+                .max_decoding_message_size(100 * 1024 * 1024)
+                .max_encoding_message_size(100 * 1024 * 1024),
+        )
         .serve(addr)
         .await?;
 

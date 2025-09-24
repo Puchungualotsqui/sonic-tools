@@ -13,7 +13,7 @@ const MaxUploadSize int64 = 50 << 20 // 50 MiB
 const MaxFiles = 10
 
 // Small cushion for multipart overhead (bound is enforced by MaxBytesReader)
-const multipartOverhead int64 = 2 << 20 // 2 MiB
+const multipartOverhead int64 = 50 << 20 // 50 MiB
 
 // CheckRequestConstraints caps the body, parses the multipart form,
 // validates file count and total size, and returns the file headers.
@@ -74,6 +74,7 @@ func ReadConfig(r *http.Request) (map[string]any, error) {
 		// return map[string]any{}, nil
 		return nil, fmt.Errorf("empty settings JSON")
 	}
+	fmt.Println("settings JSON (raw):", settingsJSON)
 
 	var settings map[string]any
 	if err := json.Unmarshal([]byte(settingsJSON), &settings); err != nil {

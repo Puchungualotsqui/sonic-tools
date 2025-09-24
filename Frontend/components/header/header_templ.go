@@ -34,7 +34,7 @@ func Header(formats []data.Format) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"navbar bg-base-300 px-6\"><div class=\"flex items-center gap-3 md:gap-8 w-full\"><a hx-get=\"/\" hx-target=\"#body-container\" hx-swap=\"innerHTML\" hx-push-url=\"/\" class=\"text-xl font-bold whitespace-nowrap cursor-pointer select-none\">Sonic Tools 🎵</a><!-- ===================== DESKTOP NAV (md+) ===================== --><ul class=\"hidden md:flex gap-6 text-base font-medium\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"navbar bg-base-300 px-6\"><div class=\"flex items-center gap-3 md:gap-8 w-full\"><a hx-get=\"/\" hx-target=\"#body-container\" hx-swap=\"innerHTML\" hx-push-url=\"/\" class=\"text-xl font-bold whitespace-nowrap cursor-pointer select-none\">Sound Tools 🎵</a><!-- ===================== DESKTOP NAV (md+) ===================== --><ul class=\"hidden md:flex gap-6 text-base font-medium\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

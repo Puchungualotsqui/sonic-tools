@@ -1,0 +1,45 @@
+networks:
+  internal: {}
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+services:
+  caddy:
+    image: caddy:2.10
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - backend
+    networks: [internal]
+
+  frontend:
+    image: dabid/frontend:latest
+    container_name: frontend
+    restart: unless-stopped
+    networks: [internal]
+
+  backend:
+    image: dabid/backend:latest
+    container_name: backend
+    restart: unless-stopped
+    environment:
+      - RUST_AUDIO_ADDR=rust-audio:50051
+    depends_on:
+      - rust-audio
+    networks: [internal]
+
+  rust-audio:
+    image: dabid/rust-audio:latest
+    container_name: rust-audio
+    restart: unless-stopped
+    networks: [internal]

@@ -29,7 +29,7 @@ func Footer() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<footer class=\"footer bg-base-300 text-base-content px-6 py-10\"><div class=\"max-w-6xl mx-auto w-full flex flex-col md:flex-row justify-between gap-10\"><!-- Brand --><div class=\"max-w-md\"><h2 class=\"text-xl font-bold mb-3\">Sonic Tools 🎵</h2><p class=\"opacity-70 leading-relaxed\">Free, simple, and powerful audio tools. Compress, convert, trim, merge, and edit metadata — all in your browser, no installs needed.</p></div><!-- GitHub Link --><div><span class=\"footer-title\">Source Code</span><ul class=\"space-y-2 mt-2\"><li><a href=\"https://github.com/Puchungualotsqui/sonic-tools\" target=\"_blank\" rel=\"noopener\" class=\"link link-hover\">View on GitHub</a></li></ul></div></div></footer>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<footer class=\"footer bg-base-300 text-base-content px-6 py-10\"><div class=\"max-w-6xl mx-auto w-full flex flex-col md:flex-row justify-between gap-10\"><!-- Brand --><div class=\"max-w-md\"><h2 class=\"text-xl font-bold mb-3\">Sound Tools 🎵</h2><p class=\"opacity-70 leading-relaxed\">Free, simple, and powerful audio tools. Compress, convert, trim, merge, and edit metadata — all in your browser, no installs needed.</p></div><!-- GitHub Link --><div><span class=\"footer-title\">Source Code</span><ul class=\"space-y-2 mt-2\"><li><a href=\"https://github.com/Puchungualotsqui/sonic-tools\" target=\"_blank\" rel=\"noopener\" class=\"link link-hover\">View on GitHub</a></li></ul></div></div></footer>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -7,3 +7,8 @@ Frontend/tmp
 .buildCommands
 Services/rust-audio/target
 Frontend/node_modules
+.secret/
+backend.tar.gz
+caddy.tar.gz
+frontend.tar.gz
+rust-audio.tar.gz

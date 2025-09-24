@@ -1,0 +1,12 @@
+soundtools.dev, www.soundtools.dev {
+	log
+
+	route /api/* {
+		uri strip_prefix /api
+		reverse_proxy backend:4000
+	}
+
+	route * {
+		reverse_proxy frontend:3000
+	}
+}

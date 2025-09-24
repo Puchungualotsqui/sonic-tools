@@ -8,13 +8,11 @@ import (
 
 	pb "backend/proto/backend/proto"
 
-	"google.golang.org/grpc/credentials/insecure"
-
 	"google.golang.org/grpc"
 )
 
 func NewMetadataClient() (pb.MetadataAudioClient, *grpc.ClientConn, error) {
-	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := NewClient()
 	if err != nil {
 		return nil, nil, err
 	}

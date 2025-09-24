@@ -1,0 +1,10 @@
+.git
+**/node_modules
+**/target
+**/dist
+**/bin
+**/.cache
+**/*.log
+Frontend/static/css/output.css
+Frontend/static/.*
+.secret/

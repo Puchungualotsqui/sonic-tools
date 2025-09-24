@@ -22,7 +22,7 @@ type Url struct {
 }
 
 func SitemapHandler(w http.ResponseWriter, r *http.Request) {
-	baseURL := "https://yourdomain.com" // TODO: replace with your actual domain
+	baseURL := "https://soundtools.dev" // TODO: replace with your actual domain
 	now := time.Now().Format("2006-01-02")
 
 	var urls []Url

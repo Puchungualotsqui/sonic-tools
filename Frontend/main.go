@@ -13,7 +13,7 @@ import (
 	"frontend/router"
 )
 
-const metaTitle = "Sonic Tools – Free Online Audio Editor"
+const metaTitle = "Sound Tools – Free Online Audio Editor"
 const metaDesc = "Edit, convert, compress, trim, merge, and boost your audio files online. 100% free, secure, and works directly in your browser."
 
 func main() {
