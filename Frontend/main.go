@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"frontend/components/head"
 	"frontend/static/data"
@@ -37,7 +38,11 @@ func main() {
 		}
 
 		if metaData == nil {
-			metaData = head.MetaData(metaTitle, metaDesc)
+			canonical := "https://soundtools.dev" + strings.ToLower(r.URL.Path)
+			if canonical == "https://soundtools.dev" {
+				canonical = "https://soundtools.dev/"
+			}
+			metaData = head.MetaData(metaTitle, metaDesc, canonical)
 
 		}
 

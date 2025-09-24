@@ -1,7 +1,7 @@
 package card
 
 templ Card(link, icon, title, description string) {
-	<a hx-get={link} hx-target="#body-container" hx-swap="innerHTML" hx-push-url={link}
+	<a href={link} hx-get={link} hx-target="#body-container" hx-swap="innerHTML" hx-push-url={link}
 	 class="card bg-base-100 shadow-xl transition-transform transform hover:scale-105 cursor-pointer">
 	   <div class="card-body text-center">
 	     <h3 class="card-title justify-center">{ icon } { title }</h3>

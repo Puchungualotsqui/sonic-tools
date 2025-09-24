@@ -29,6 +29,35 @@ templ Layout(content, metaData templ.Component, formats []data.Format) {
 			<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 			<script>
+			document.body.addEventListener("htmx:afterSwap", (e) => {
+              // Only run when full tool content is swapped into #body-container
+              if (e.detail.xhr && e.detail.target && e.detail.target.id === "body-container") {
+                const doc = new DOMParser().parseFromString(e.detail.xhr.responseText, "text/html");
+
+                // Update <meta name="description">
+                const newDesc = doc.querySelector("meta[name='description']");
+                if (newDesc) {
+                  let old = document.querySelector("meta[name='description']");
+                  if (old) {
+                    old.setAttribute("content", newDesc.getAttribute("content"));
+                  } else {
+                    document.head.appendChild(newDesc);
+                  }
+                }
+
+                // Update <link rel="canonical">
+                const newCanon = doc.querySelector("link[rel='canonical']");
+                if (newCanon) {
+                  let old = document.querySelector("link[rel='canonical']");
+                  if (old) {
+                    old.setAttribute("href", newCanon.getAttribute("href"));
+                  } else {
+                    document.head.appendChild(newCanon);
+                  }
+                }
+              }
+            });
+
             document.addEventListener("DOMContentLoaded", () => {
               document.body.addEventListener("htmx:afterSwap", (e) => {
                 if (e.detail.target.id === "body-container") {

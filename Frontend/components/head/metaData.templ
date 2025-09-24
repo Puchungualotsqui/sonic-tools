@@ -1,7 +1,9 @@
 package head
 
-templ MetaData(title string, description string) {
-    <title hx-swap-oob="true">{ title }</title>
+templ MetaData(title, description, canonical string) {
+    <title hx-swap-oob="true" id="page-title">{ title }</title>
 
-    <meta name="description" content={ description } hx-swap-oob="true"/>
+    <meta hx-swap-oob="true" id="page-description" name="description" content={ description } />
+
+    <link hx-swap-oob="true" id="page-canonical" rel="canonical" href={ canonical }/>
 }

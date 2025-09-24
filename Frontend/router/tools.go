@@ -15,6 +15,11 @@ import (
 func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 	var bodyContent templ.Component
 	var metaData templ.Component = nil
+	path := strings.TrimSuffix(strings.ToLower(r.URL.Path), "/")
+	canonical := "https://soundtools.dev" + path
+	if canonical == "https://soundtools.dev" {
+		canonical = "https://soundtools.dev/"
+	}
 
 	switch r.URL.Path {
 	case "/":
@@ -30,7 +35,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			settings.Compress(),
 			".mp3,.ogg,.aac,.alac",
 			true)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	case "/convert":
 		metaTitle := "Audio Converter – Free Online Tool"
 		metaDesc := "Convert audio files like MP3, WAV, FLAC, OGG, AAC, and more online. Free, secure, and works directly in your browser."
@@ -42,7 +47,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			settings.Convert(""),
 			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.wma",
 			true)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	case "/trim":
 		metaTitle := "Audio Trimmer – Free Online Tool"
 		metaDesc := "Trim MP3, WAV, FLAC, OGG, and other audio files online. Cut silence or unwanted parts quickly and easily."
@@ -54,7 +59,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			settings.Trim(),
 			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.wma",
 			false)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	case "/merge":
 		metaTitle := "Audio Joiner – Free Online Tool"
 		metaDesc := "Merge MP3, WAV, FLAC, OGG, and other audio files online. Combine multiple tracks into one instantly."
@@ -66,7 +71,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			settings.Merge(""),
 			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.wma",
 			true)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	case "/metadata":
 		metaTitle := "Audio Metadata Editor – Free Online Tool"
 		metaDesc := "Edit audio tags like title, artist, and album for MP3, FLAC, OGG, and more. Free, secure, and easy to use."
@@ -78,7 +83,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			settings.Metadata(),
 			".mp3,.flac,.ogg,.opus,.aac,.m4a,.wma",
 			false)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	case "/boost":
 		metaTitle := "Audio Volume Booster – Free Online Tool"
 		metaDesc := "Increase audio volume for MP3, WAV, FLAC, OGG, and more online. Make your audio louder instantly and safely."
@@ -90,7 +95,7 @@ func GetBodyDynamicTool(r *http.Request) (templ.Component, templ.Component) {
 			settings.Boost(),
 			".mp3,.wav,.flac,.ogg,.opus,.aiff,.aac,.m4a,.wma",
 			true)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	default:
 		bodyContent = nil
 	}
@@ -105,6 +110,17 @@ func GetBodySpecificTool(r *http.Request) (templ.Component, templ.Component) {
 	parts := strings.Split(path, "-")
 	ext := strings.ToUpper(parts[1])
 	fileExt := "." + parts[1]
+	pathCan := strings.TrimSuffix(strings.ToLower(r.URL.Path), "/")
+	canonical := "https://soundtools.dev" + pathCan
+	if canonical == "https://soundtools.dev" {
+		canonical = "https://soundtools.dev/"
+	}
+
+	// Debug logs
+	fmt.Println("DEBUG: Raw URL.Path =", r.URL.Path)
+	fmt.Println("DEBUG: Normalized path =", pathCan)
+	fmt.Println("DEBUG: Canonical =", canonical)
+
 	switch parts[0] {
 	case "convert":
 		var thirdPard string = ""
@@ -128,7 +144,7 @@ func GetBodySpecificTool(r *http.Request) (templ.Component, templ.Component) {
 		}
 
 		bodyContent = body.Tool(h1, h2, desc, "Convert", settings.Convert(thirdPard), fileExt, true)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	case "compress":
 		h1 := fmt.Sprintf("Compress %s Files Online – Reduce Size Without Losing Quality", ext)
 		h2 := fmt.Sprintf("How to Compress %s Files Online", ext)
@@ -137,8 +153,8 @@ func GetBodySpecificTool(r *http.Request) (templ.Component, templ.Component) {
 		metaTitle := fmt.Sprintf("%s Compressor – Free Online Tool", strings.ToUpper(ext))
 		metaDesc := fmt.Sprintf("Compress %s files online without losing quality. Fast, free, and secure in your browser.", strings.ToUpper(ext))
 
-		bodyContent = body.Tool(h1, h2, desc, "Convert", settings.Compress(), fileExt, true)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		bodyContent = body.Tool(h1, h2, desc, "Compress", settings.Compress(), fileExt, true)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	case "trim":
 		h1 := fmt.Sprintf("Trim %s Audio Online – Cut Songs & Remove Silence", ext)
 		h2 := fmt.Sprintf("How to Trim %s Files Online", ext)
@@ -148,7 +164,7 @@ func GetBodySpecificTool(r *http.Request) (templ.Component, templ.Component) {
 		metaDesc := fmt.Sprintf("Trim %s files online to remove silence or unwanted parts. Quick, free, and easy to use.", strings.ToUpper(ext))
 
 		bodyContent = body.Tool(h1, h2, desc, "Trim", settings.Trim(), fileExt, false)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	case "merge":
 		h1 := fmt.Sprintf("Merge %s Files Online – Combine Multiple Tracks into One", ext)
 		h2 := fmt.Sprintf("How to Merge %s Files Online", ext)
@@ -158,7 +174,7 @@ func GetBodySpecificTool(r *http.Request) (templ.Component, templ.Component) {
 		metaDesc := fmt.Sprintf("Merge multiple %s files into one track online. Free, secure, and works in your browser.", strings.ToUpper(ext))
 
 		bodyContent = body.Tool(h1, h2, desc, "Merge", settings.Merge(parts[1]), fileExt, true)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	case "metadata":
 		h1 := fmt.Sprintf("Edit %s Metadata Tags Online – Change Title, Artist, Album", ext)
 		h2 := fmt.Sprintf("How to Edit %s Metadata Online", ext)
@@ -168,7 +184,7 @@ func GetBodySpecificTool(r *http.Request) (templ.Component, templ.Component) {
 		metaDesc := fmt.Sprintf("Edit %s tags like title, artist, and album online. Quick, free, and secure in your browser.", strings.ToUpper(ext))
 
 		bodyContent = body.Tool(h1, h2, desc, "Save metadata", settings.Metadata(), fileExt, false)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	case "boost":
 		h1 := fmt.Sprintf("Boost %s Volume Online – Make Audio Louder Instantly", ext)
 		h2 := fmt.Sprintf("How to Boost %s Volume Online", ext)
@@ -178,7 +194,7 @@ func GetBodySpecificTool(r *http.Request) (templ.Component, templ.Component) {
 		metaDesc := fmt.Sprintf("Boost %s volume online and make your audio louder instantly. Free, safe, and easy to use.", strings.ToUpper(ext))
 
 		bodyContent = body.Tool(h1, h2, desc, "Apply", settings.Boost(), fileExt, true)
-		metaData = head.MetaData(metaTitle, metaDesc)
+		metaData = head.MetaData(metaTitle, metaDesc, canonical)
 	default:
 		bodyContent = nil
 	}

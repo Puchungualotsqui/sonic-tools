@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -21,48 +20,68 @@ type Url struct {
 	Priority   string `xml:"priority,omitempty"`
 }
 
+var FormatTools = map[string][]string{
+	"mp3":  {"convert", "compress", "trim", "merge", "metadata", "boost"},
+	"wav":  {"convert", "trim", "merge", "boost"},
+	"flac": {"convert", "trim", "merge", "metadata", "boost"},
+	"ogg":  {"convert", "compress", "trim", "merge", "metadata", "boost"},
+	"opus": {"convert", "compress", "trim", "merge", "metadata", "boost"},
+	"aiff": {"convert", "trim", "merge", "boost"},
+	"aac":  {"convert", "trim", "merge", "metadata", "boost"},
+	"m4a":  {"convert", "trim", "merge", "metadata", "boost"},
+	"wma":  {"convert", "trim", "merge", "metadata", "boost"},
+}
+
 func SitemapHandler(w http.ResponseWriter, r *http.Request) {
-	baseURL := "https://soundtools.dev" // TODO: replace with your actual domain
+	baseURL := "https://soundtools.dev"
 	now := time.Now().Format("2006-01-02")
 
 	var urls []Url
 
-	// Root pages (home + generic tools)
-	rootPaths := []string{
-		"/", "/compress", "/convert", "/trim", "/merge", "/metadata", "/boost",
-	}
-
-	for _, p := range rootPaths {
+	// 1. Root pages
+	rootTools := []string{"compress", "convert", "trim", "merge", "metadata", "boost"}
+	urls = append(urls, Url{
+		Loc:        baseURL + "/",
+		LastMod:    now,
+		ChangeFreq: "weekly",
+		Priority:   "1.0",
+	})
+	for _, tool := range rootTools {
 		urls = append(urls, Url{
-			Loc:        fmt.Sprintf("%s%s", baseURL, p),
+			Loc:        baseURL + "/" + tool,
 			LastMod:    now,
 			ChangeFreq: "weekly",
 			Priority:   "0.9",
 		})
 	}
 
-	// Dynamic pages from Formats
-	for _, f := range Formats {
-		for _, t := range f.Tools {
-			// base tool path (e.g., /compress-mp3, /merge-flac, /convert-mp3)
+	// 2. Tool + Format pages (/tool-format)
+	for format, tools := range FormatTools {
+		for _, tool := range tools {
 			urls = append(urls, Url{
-				Loc:        baseURL + t.Path,
+				Loc:        fmt.Sprintf("%s/%s-%s", baseURL, tool, format),
 				LastMod:    now,
 				ChangeFreq: "weekly",
 				Priority:   "0.7",
 			})
+		}
+	}
 
-			// special case: Convert also has variants (convert-X-to-Y)
-			if t.Name == "Convert" {
-				for _, v := range t.Variants {
-					urls = append(urls, Url{
-						Loc:        fmt.Sprintf("%s%s-%s", baseURL, t.Path, strings.ToLower(v)),
-						LastMod:    now,
-						ChangeFreq: "weekly",
-						Priority:   "0.6",
-					})
-				}
+	// 3. Convert from X → Y pages (/convert-x-y)
+	for fromFormat, fromTools := range FormatTools {
+		if !contains(fromTools, "convert") {
+			continue
+		}
+		for toFormat := range FormatTools {
+			if fromFormat == toFormat {
+				continue
 			}
+			urls = append(urls, Url{
+				Loc:        fmt.Sprintf("%s/convert-%s-%s", baseURL, fromFormat, toFormat),
+				LastMod:    now,
+				ChangeFreq: "weekly",
+				Priority:   "0.6",
+			})
 		}
 	}
 
@@ -76,4 +95,13 @@ func SitemapHandler(w http.ResponseWriter, r *http.Request) {
 		Xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9",
 		Urls:  urls,
 	})
+}
+
+func contains(arr []string, s string) bool {
+	for _, a := range arr {
+		if a == s {
+			return true
+		}
+	}
+	return false
 }
