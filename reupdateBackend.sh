@@ -21,6 +21,6 @@ echo "[3/4] Copying to VPS..."
 rsync -avz --progress $TARFILE $USER@$HOST:$DEST
 
 echo "[4/4] Loading + restarting on VPS..."
-ssh $USER@$HOST "cd $DEST && docker load < $TARFILE && docker compose up -d rust-audio"
+ssh $USER@$HOST "cd $DEST && docker load < $TARFILE && docker compose up -d backend"
 
 echo "Redeployment Successfully"
